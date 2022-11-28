@@ -13,4 +13,18 @@ const client = new Pool({
   password: POSTGRESS_PASSWORD,
 });
 
+
+client.connect();
+
+let query = `Select * from "Users"`;
+
+client.query(query, (err, res)=>{
+    if(!err){
+        console.log(res.rows);
+    } else{
+        console.log(err.message)
+    }
+    client.end;
+})
+
 export default client;

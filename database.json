@@ -1,16 +1,10 @@
 {
+  "defaultEnv": {"ENV": "NODE_ENV"},
     "dev": {
       "driver": "pg",
-      "host": "5432",
-      "database": "shopping",
-      "user": "shopping_user",
-      "password": "password123"
-    },
-    "test": {
-      "driver": "pg",
-      "host": "5432",
-      "database": "shopping",
-      "user": "shopping_user",
-      "password": "password123"
+      "host": {"ENV": "POSTGRES_HOST"},
+      "database": {"ENV": "POSTGRES_DB"},
+      "user": {"ENV": "POSTGRES_USER"},
+      "password": {"ENV": "POSTGRES_PASSWORD"}
     }
   }
