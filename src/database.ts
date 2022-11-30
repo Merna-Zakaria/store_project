@@ -3,28 +3,27 @@ import { Pool } from "pg";
 
 dotenv.config();
 
-const { POSTGRES_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRESS_PASSWORD } =
+const { POSTGRES_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRESS_PASSWORD, POSTGRES_TEST_DB, ENV } =
   process.env;
 
-const client = new Pool({
-  host: POSTGRES_HOST,
-  database: POSTGRES_DB,
-  user: POSTGRES_USER,
-  password: POSTGRESS_PASSWORD,
-});
+let Client = new Pool ;
 
+if(ENV === 'test'){
+  Client = new Pool({
+   host: POSTGRES_HOST,
+   database: POSTGRES_DB,
+   user: POSTGRES_USER,
+   password: POSTGRESS_PASSWORD,
+ });
+}
 
-client.connect();
+if(ENV === 'dev'){
+  Client = new Pool({
+   host: POSTGRES_HOST,
+   database: POSTGRES_TEST_DB,
+   user: POSTGRES_USER,
+   password: POSTGRESS_PASSWORD,
+ });
+}
 
-let query = `Select * from "Users"`;
-
-client.query(query, (err, res)=>{
-    if(!err){
-        console.log(res.rows);
-    } else{
-        console.log(err.message)
-    }
-    client.end;
-})
-
-export default client;
+export default Client;
