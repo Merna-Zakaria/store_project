@@ -1,5 +1,6 @@
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import {User, UserSrore} from "../models/user"
+import jwt, { Secret } from 'jsonwebtoken'
 
 const store = new UserSrore()
 
@@ -22,7 +23,8 @@ export const create = async (req: Request, res: Response) => {
       }
 
       const newUser = await store.create(user)
-      res.json(newUser)
+      let token = jwt.sign({user: newUser}, process.env.TOKENT_SECRET as Secret)
+      res.json(token)
   } catch(err) {
       res.status(400)
       res.json(err)
@@ -42,6 +44,18 @@ export const authenticate = async (req: Request, res: Response) => {
   } catch(err) {
       res.status(400)
       res.json(err)
+  }
+}
+
+export const verifyAuthToken = (req: Request, res: Response, next: NextFunction) => {
+  try {
+      const authorizationHeader = req.headers.authorization
+      const token:unknown = authorizationHeader?.split(' ')[1]
+      const decoded = jwt.verify(token as string, process.env.TOKEN_SECRET as Secret)
+
+      next()
+  } catch (error) {
+      res.status(401)
   }
 }
 

@@ -35,9 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 exports.__esModule = true;
-exports.destroy = exports.authenticate = exports.create = exports.show = exports.index = void 0;
+exports.destroy = exports.verifyAuthToken = exports.authenticate = exports.create = exports.show = exports.index = void 0;
 var user_1 = require("../models/user");
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var store = new user_1.UserSrore();
 var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var users;
@@ -66,7 +70,7 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
 }); };
 exports.show = show;
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, newUser, err_1;
+    var user, newUser, token, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -79,7 +83,8 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, store.create(user)];
             case 1:
                 newUser = _a.sent();
-                res.json(newUser);
+                token = jsonwebtoken_1["default"].sign({ user: newUser }, process.env.TOKENT_SECRET);
+                res.json(token);
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
@@ -117,6 +122,18 @@ var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0
     });
 }); };
 exports.authenticate = authenticate;
+var verifyAuthToken = function (req, res, next) {
+    try {
+        var authorizationHeader = req.headers.authorization;
+        var token = authorizationHeader === null || authorizationHeader === void 0 ? void 0 : authorizationHeader.split(' ')[1];
+        var decoded = jsonwebtoken_1["default"].verify(token, process.env.TOKEN_SECRET);
+        next();
+    }
+    catch (error) {
+        res.status(401);
+    }
+};
+exports.verifyAuthToken = verifyAuthToken;
 var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, deleted;
     return __generator(this, function (_a) {

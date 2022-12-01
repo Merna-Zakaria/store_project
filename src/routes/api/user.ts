@@ -1,5 +1,5 @@
 import express from "express";
-import { index, show, create, authenticate, destroy } from "../../controllers/userController";
+import { index, show, create, authenticate, destroy, verifyAuthToken } from "../../controllers/userController";
 const userRouter = express.Router();
 
 userRouter.get("/", index);
