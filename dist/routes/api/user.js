@@ -9,5 +9,6 @@ var userRouter = express_1["default"].Router();
 userRouter.get("/", userController_1.index);
 userRouter.get("/:id", userController_1.show);
 userRouter.post("/", userController_1.create);
+userRouter.post("/authenticate", userController_1.authenticate);
 userRouter["delete"]("/:id", userController_1.destroy);
 exports["default"] = userRouter;

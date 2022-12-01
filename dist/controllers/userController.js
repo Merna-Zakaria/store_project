@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.destroy = exports.create = exports.show = exports.index = void 0;
+exports.destroy = exports.authenticate = exports.create = exports.show = exports.index = void 0;
 var user_1 = require("../models/user");
 var store = new user_1.UserSrore();
 var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -91,6 +91,32 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
     });
 }); };
 exports.create = create;
+var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, userLoggedIn, err_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                user = {
+                    first_name: req.body.first_name,
+                    seconde_name: req.body.seconde_name,
+                    password: req.body.password
+                };
+                return [4 /*yield*/, store.authenticate(user)];
+            case 1:
+                userLoggedIn = _a.sent();
+                res.json(userLoggedIn);
+                return [3 /*break*/, 3];
+            case 2:
+                err_2 = _a.sent();
+                res.status(400);
+                res.json(err_2);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.authenticate = authenticate;
 var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, deleted;
     return __generator(this, function (_a) {

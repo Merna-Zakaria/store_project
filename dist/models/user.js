@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 exports.UserSrore = void 0;
 var database_1 = __importDefault(require("../database"));
+var bcrypt_1 = __importDefault(require("bcrypt"));
 var UserSrore = /** @class */ (function () {
     function UserSrore() {
     }
@@ -75,7 +76,7 @@ var UserSrore = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = 'SELECT * FROM users WHERE id=($1)';
+                        sql = "SELECT * FROM users WHERE id=($1)";
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
@@ -94,17 +95,21 @@ var UserSrore = /** @class */ (function () {
     };
     UserSrore.prototype.create = function (u) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, user, err_3;
+            var sql, hash, conn, result, user, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = 'INSERT INTO users (first_name, seconde_name, password) VALUES ($1, $2, $3) RETURNING *';
+                        sql = "INSERT INTO users (first_name, seconde_name, password_digest) VALUES ($1, $2, $3) RETURNING *";
+                        hash = bcrypt_1["default"].hashSync(u.password + process.env.BCRYPT_PASSWORD, parseInt(process.env.SALT_ROUNDS));
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
-                        return [4 /*yield*/, conn
-                                .query(sql, [u.first_name, u.seconde_name, u.password])];
+                        return [4 /*yield*/, conn.query(sql, [
+                                u.first_name,
+                                u.seconde_name,
+                                hash,
+                            ])];
                     case 2:
                         result = _a.sent();
                         user = result.rows[0];
@@ -114,6 +119,30 @@ var UserSrore = /** @class */ (function () {
                         err_3 = _a.sent();
                         throw new Error("Could not add new user. Error: ".concat(err_3));
                     case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    UserSrore.prototype.authenticate = function (u) {
+        return __awaiter(this, void 0, void 0, function () {
+            var conn, sql, result, user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, database_1["default"].connect()];
+                    case 1:
+                        conn = _a.sent();
+                        sql = "SELECT password_digest FROM users WHERE first_name=($1) AND seconde_name=($2)";
+                        return [4 /*yield*/, conn.query(sql, [u.first_name, u.seconde_name])];
+                    case 2:
+                        result = _a.sent();
+                        if (result.rows.length) {
+                            user = result.rows[0];
+                            if (bcrypt_1["default"].compareSync(u.password + process.env.BCRYPT_PASSWORD, user.password_digest)) {
+                                return [2 /*return*/, user];
+                            }
+                        }
+                        conn.release();
+                        return [2 /*return*/, null];
                 }
             });
         });
@@ -137,7 +166,7 @@ var UserSrore = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = 'DELETE FROM users WHERE id=($1)';
+                        sql = "DELETE FROM users WHERE id=($1)";
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();

@@ -13,7 +13,7 @@ export const show = async (req: Request, res: Response) => {
     res.json(user)
  }
 
-export const create = async (req: Request, res: Response) => {
+export const create = async (req: Request, res: Response) => { 
   try {
       const user = {
           first_name: req.body.first_name,
@@ -23,6 +23,22 @@ export const create = async (req: Request, res: Response) => {
 
       const newUser = await store.create(user)
       res.json(newUser)
+  } catch(err) {
+      res.status(400)
+      res.json(err)
+  }
+}
+
+export const authenticate = async (req: Request, res: Response) => { 
+  try {
+      const user = {
+          first_name: req.body.first_name,
+          seconde_name: req.body.seconde_name,
+          password: req.body.password
+      }
+
+      const userLoggedIn = await store.authenticate(user)
+      res.json(userLoggedIn)
   } catch(err) {
       res.status(400)
       res.json(err)
