@@ -20,7 +20,8 @@ if(ENV === 'test'){
 if(ENV === 'dev'){
   Client = new Pool({
    host: POSTGRES_HOST,
-   database: POSTGRES_TEST_DB,
+   database: POSTGRES_DB,
+  //  database: POSTGRES_TEST_DB, //use in testiong
    user: POSTGRES_USER,
    password: POSTGRESS_PASSWORD,
  });

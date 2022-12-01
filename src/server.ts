@@ -7,7 +7,7 @@ const app: express.Application = express()
 const address: string = "0.0.0.0:3000"
 
 const corsOptions = {
-    origin: 'http://store_app.com',
+    origin: 'http://localhost:3000',
     optionsSuccessStatus: 200
 }
 

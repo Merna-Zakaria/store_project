@@ -10,7 +10,7 @@ var cors_1 = __importDefault(require("cors"));
 var app = (0, express_1["default"])();
 var address = "0.0.0.0:3000";
 var corsOptions = {
-    origin: 'http://store_app.com',
+    origin: 'http://localhost:3000',
     optionsSuccessStatus: 200
 };
 app.use((0, cors_1["default"])(corsOptions));

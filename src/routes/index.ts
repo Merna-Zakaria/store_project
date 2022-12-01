@@ -1,11 +1,11 @@
 import express from "express";
-import imageRouter from "./api/images"
+import userRouter from "./api/user"
 const routes = express.Router();
 
 routes.get("/", (req: express.Request, res: express.Response): void => {
   res.send("main router");
 });
 
-routes.use("/images", imageRouter);
+routes.use("/users", userRouter);
 
 export default routes;

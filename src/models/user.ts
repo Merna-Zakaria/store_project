@@ -1,7 +1,7 @@
 import Client from "../database";
 
 export type User = {
-    id: Number;
+    id?: Number;
     first_name: string;
     seconde_name: string;
     password: string
@@ -35,14 +35,14 @@ export class UserSrore {
     }
   }
 
-  async create(b: User): Promise<User> {  // post /users --> create new user
+  async create(u: User): Promise<User> {  // post /users --> create new user
       try {
-    const sql = 'INSERT INTO users (first_name, second_name, password) VALUES(jojo, m, 2410) RETURNING *'
+    const sql = 'INSERT INTO users (first_name, seconde_name, password) VALUES ($1, $2, $3) RETURNING *'
     // @ts-ignore
     const conn = await Client.connect()
 
     const result = await conn
-        .query(sql, [b.first_name, b.seconde_name, b.password])
+        .query(sql, [u.first_name, u.seconde_name, u.password])
 
     const user = result.rows[0]
 
@@ -70,7 +70,7 @@ export class UserSrore {
 //     }
 //   }
 
-  async delete(id: string): Promise<User> {
+  async delete(id: number): Promise<User> {
       try {
     const sql = 'DELETE FROM users WHERE id=($1)'
     // @ts-ignore
