@@ -113,6 +113,7 @@ var UserSrore = /** @class */ (function () {
                     case 2:
                         result = _a.sent();
                         user = result.rows[0];
+                        console.log('result', result);
                         conn.release();
                         return [2 /*return*/, user];
                     case 3:

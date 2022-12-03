@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
 import {User, UserSrore} from "../models/user"
 import jwt, { Secret } from 'jsonwebtoken'
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const store = new UserSrore()
 
@@ -23,10 +26,11 @@ export const create = async (req: Request, res: Response) => {
       }
 
       const newUser = await store.create(user)
-      let token = jwt.sign({user: newUser}, process.env.TOKENT_SECRET as Secret)
+      let token = jwt.sign({user: newUser}, process.env.TOKEN_SECRET as Secret)
       res.json(token)
   } catch(err) {
       res.status(400)
+      console.log(err)
       res.json(err)
   }
 }
@@ -40,7 +44,8 @@ export const authenticate = async (req: Request, res: Response) => {
       }
 
       const userLoggedIn = await store.authenticate(user)
-      res.json(userLoggedIn)
+      var token = jwt.sign({ user: userLoggedIn }, process.env.TOKEN_SECRET as Secret);
+      res.json(token)
   } catch(err) {
       res.status(400)
       res.json(err)
@@ -48,6 +53,7 @@ export const authenticate = async (req: Request, res: Response) => {
 }
 
 export const verifyAuthToken = (req: Request, res: Response, next: NextFunction) => {
+  console.log('process.env.TOKEN_SECRET', process.env.TOKEN_SECRET)
   try {
       const authorizationHeader = req.headers.authorization
       const token:unknown = authorizationHeader?.split(' ')[1]
@@ -56,6 +62,8 @@ export const verifyAuthToken = (req: Request, res: Response, next: NextFunction)
       next()
   } catch (error) {
       res.status(401)
+      console.log(error)
+      res.json('Access denied, invalid token')
   }
 }
 
@@ -64,3 +72,33 @@ export const destroy = async (req: Request, res: Response) => {
   const deleted = await store.delete(id)
   res.json(deleted)
 }
+
+
+
+// const update = async (req: Request, res: Response) => {
+//   const user: User = {
+//       id: parseInt(req.params.id),
+//       username: req.body.username,
+//       password: req.body.password,
+//   }
+//   try {
+//       const authorizationHeader = req.headers.authorization
+//       const token = authorizationHeader.split(' ')[1]
+//       const decoded = jwt.verify(token, process.env.TOKEN_SECRET)
+//       if(decoded.id !== user.id) {
+//           throw new Error('User id does not match!')
+//       }
+//   } catch(err) {
+//       res.status(401)
+//       res.json(err)
+//       return
+//   }
+
+//   try {
+//       const updated = await store.create(user)
+//       res.json(updated)
+//   } catch(err) {
+//       res.status(400)
+//       res.json(err + user)
+//   }
+// }

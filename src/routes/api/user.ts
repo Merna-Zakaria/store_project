@@ -3,9 +3,9 @@ import { index, show, create, authenticate, destroy, verifyAuthToken } from "../
 const userRouter = express.Router();
 
 userRouter.get("/", index);
-userRouter.get("/:id", show);
-userRouter.post("/", create);
-userRouter.post("/authenticate", authenticate);
-userRouter.delete("/:id", destroy);
+userRouter.get("/:id",verifyAuthToken,  show);
+userRouter.post("/", create);                       // as signup
+userRouter.post("/authenticate", authenticate);     // as login
+userRouter.delete("/:id", verifyAuthToken, destroy);
 
 export default userRouter;

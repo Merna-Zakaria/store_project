@@ -52,6 +52,7 @@ export class UserSrore {
         hash,
       ]);
       const user = result.rows[0];
+      console.log('result', result)
       conn.release();
       return user;
     } catch (err) {

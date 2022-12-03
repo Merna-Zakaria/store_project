@@ -42,6 +42,8 @@ exports.__esModule = true;
 exports.destroy = exports.verifyAuthToken = exports.authenticate = exports.create = exports.show = exports.index = void 0;
 var user_1 = require("../models/user");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1["default"].config();
 var store = new user_1.UserSrore();
 var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var users;
@@ -83,12 +85,13 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, store.create(user)];
             case 1:
                 newUser = _a.sent();
-                token = jsonwebtoken_1["default"].sign({ user: newUser }, process.env.TOKENT_SECRET);
+                token = jsonwebtoken_1["default"].sign({ user: newUser }, process.env.TOKEN_SECRET);
                 res.json(token);
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
                 res.status(400);
+                console.log(err_1);
                 res.json(err_1);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
@@ -97,7 +100,7 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
 }); };
 exports.create = create;
 var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, userLoggedIn, err_2;
+    var user, userLoggedIn, token, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -110,7 +113,8 @@ var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0
                 return [4 /*yield*/, store.authenticate(user)];
             case 1:
                 userLoggedIn = _a.sent();
-                res.json(userLoggedIn);
+                token = jsonwebtoken_1["default"].sign({ user: userLoggedIn }, process.env.TOKEN_SECRET);
+                res.json(token);
                 return [3 /*break*/, 3];
             case 2:
                 err_2 = _a.sent();
@@ -123,6 +127,7 @@ var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0
 }); };
 exports.authenticate = authenticate;
 var verifyAuthToken = function (req, res, next) {
+    console.log('process.env.TOKEN_SECRET', process.env.TOKEN_SECRET);
     try {
         var authorizationHeader = req.headers.authorization;
         var token = authorizationHeader === null || authorizationHeader === void 0 ? void 0 : authorizationHeader.split(' ')[1];
@@ -131,6 +136,8 @@ var verifyAuthToken = function (req, res, next) {
     }
     catch (error) {
         res.status(401);
+        console.log(error);
+        res.json('Access denied, invalid token');
     }
 };
 exports.verifyAuthToken = verifyAuthToken;
@@ -149,3 +156,29 @@ var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
     });
 }); };
 exports.destroy = destroy;
+// const update = async (req: Request, res: Response) => {
+//   const user: User = {
+//       id: parseInt(req.params.id),
+//       username: req.body.username,
+//       password: req.body.password,
+//   }
+//   try {
+//       const authorizationHeader = req.headers.authorization
+//       const token = authorizationHeader.split(' ')[1]
+//       const decoded = jwt.verify(token, process.env.TOKEN_SECRET)
+//       if(decoded.id !== user.id) {
+//           throw new Error('User id does not match!')
+//       }
+//   } catch(err) {
+//       res.status(401)
+//       res.json(err)
+//       return
+//   }
+//   try {
+//       const updated = await store.create(user)
+//       res.json(updated)
+//   } catch(err) {
+//       res.status(400)
+//       res.json(err + user)
+//   }
+// }
