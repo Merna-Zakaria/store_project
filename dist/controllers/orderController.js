@@ -45,7 +45,7 @@ var dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1["default"].config();
 var store = new order_1.OrderSrore();
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var order, orderUser, err_1;
+    var order, orderCreated, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -57,8 +57,8 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 };
                 return [4 /*yield*/, store.create(order)];
             case 1:
-                orderUser = _a.sent();
-                res.json(orderUser);
+                orderCreated = _a.sent();
+                res.json(orderCreated);
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
@@ -72,49 +72,27 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
 }); };
 exports.create = create;
 var addProduct = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var orderId, productId, quantity, ordersql, conn, result, order, err_2, sql, conn, result, order, err_3;
+    var orderId, productId, quantity, addedProduct, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 orderId = _req.params.id;
-                productId = _req.body.productId;
+                productId = _req.body.product_id;
                 quantity = parseInt(_req.body.quantity);
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 4, , 5]);
-                ordersql = 'SELECT * FROM orders WHERE id=($1)';
-                return [4 /*yield*/, Client.connect()];
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, store.addProduct(quantity, orderId, productId)];
             case 2:
-                conn = _a.sent();
-                return [4 /*yield*/, conn.query(ordersql, [orderId])];
+                addedProduct = _a.sent();
+                res.json(addedProduct);
+                return [3 /*break*/, 4];
             case 3:
-                result = _a.sent();
-                order = result.rows[0];
-                if (order.status !== "open") {
-                    throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, " because order status is ").concat(order.status));
-                }
-                conn.release();
-                return [3 /*break*/, 5];
-            case 4:
                 err_2 = _a.sent();
-                throw new Error("".concat(err_2));
-            case 5:
-                _a.trys.push([5, 8, , 9]);
-                sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *';
-                return [4 /*yield*/, Client.connect()];
-            case 6:
-                conn = _a.sent();
-                return [4 /*yield*/, conn
-                        .query(sql, [quantity, orderId, productId])];
-            case 7:
-                result = _a.sent();
-                order = result.rows[0];
-                conn.release();
-                return [2 /*return*/, order];
-            case 8:
-                err_3 = _a.sent();
-                throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, ": ").concat(err_3));
-            case 9: return [2 /*return*/];
+                res.status(400);
+                res.json(err_2);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };

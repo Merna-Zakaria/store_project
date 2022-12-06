@@ -60,6 +60,7 @@ var OrderSrore = /** @class */ (function () {
                     case 2:
                         result = _b.sent();
                         order_1 = result.rows[0];
+                        console.log('order created', order_1, 'o.products', JSON.stringify(o.products));
                         if (!order_1.id) return [3 /*break*/, 4];
                         sql = (_a = o.products) === null || _a === void 0 ? void 0 : _a.map(function (item) { return "(".concat(item.quantity, ", ").concat(order_1.id, ", ").concat(item.id, ")"); });
                         finalQuery = "INSERT INTO order_products (quantity, order_id, product_id) VALUES " + sql;
@@ -68,7 +69,7 @@ var OrderSrore = /** @class */ (function () {
                         result_1 = _b.sent();
                         _b.label = 4;
                     case 4:
-                        // console.log('result', result)
+                        console.log('result', result);
                         conn.release();
                         return [2 /*return*/, order_1];
                     case 5:
@@ -81,26 +82,44 @@ var OrderSrore = /** @class */ (function () {
     };
     OrderSrore.prototype.addProduct = function (quantity, orderId, productId) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, order, err_2;
+            var ordersql, conn, result, order, err_2, sql, conn, result, order, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *';
+                        ordersql = 'SELECT * FROM orders WHERE id=($1)';
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
+                        return [4 /*yield*/, conn.query(ordersql, [orderId])];
+                    case 2:
+                        result = _a.sent();
+                        order = result.rows[0];
+                        if (order.status !== "open") {
+                            throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, " because order status is ").concat(order.status));
+                        }
+                        conn.release();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        err_2 = _a.sent();
+                        throw new Error("".concat(err_2));
+                    case 4:
+                        _a.trys.push([4, 7, , 8]);
+                        sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *';
+                        return [4 /*yield*/, database_1["default"].connect()];
+                    case 5:
+                        conn = _a.sent();
                         return [4 /*yield*/, conn
                                 .query(sql, [quantity, orderId, productId])];
-                    case 2:
+                    case 6:
                         result = _a.sent();
                         order = result.rows[0];
                         conn.release();
                         return [2 /*return*/, order];
-                    case 3:
-                        err_2 = _a.sent();
-                        throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, ": ").concat(err_2));
-                    case 4: return [2 /*return*/];
+                    case 7:
+                        err_3 = _a.sent();
+                        throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, ": ").concat(err_3));
+                    case 8: return [2 /*return*/];
                 }
             });
         });

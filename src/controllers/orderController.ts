@@ -14,8 +14,8 @@ export const create = async (req: Request, res: Response) => {
             products: req.body.products,
             status: req.body.status
           };
-        const orderUser = await store.create(order)
-        res.json(orderUser)
+        const orderCreated = await store.create(order)
+        res.json(orderCreated)
     } catch(err) {
         res.status(400)
         console.log(err)
@@ -23,44 +23,16 @@ export const create = async (req: Request, res: Response) => {
     }
   }
 
-export const addProduct = async (_req: Request, res: Response) => {
+  export const addProduct = async (_req: Request, res: Response) => {
     const orderId: string = _req.params.id
-    const productId: string = _req.body.productId
+    const productId: string = _req.body.product_id
     const quantity: number = parseInt(_req.body.quantity)
   
-// get order to see if it is open
-try {
-    const ordersql = 'SELECT * FROM orders WHERE id=($1)'
-    //@ts-ignore
-    const conn = await Client.connect()
-
-    const result = await conn.query(ordersql, [orderId])
-
-    const order = result.rows[0]
-
-    if (order.status !== "open") {
-      throw new Error(`Could not add product ${productId} to order ${orderId} because order status is ${order.status}`)
+    try {
+      const addedProduct = await store.addProduct(quantity, orderId, productId)
+      res.json(addedProduct)
+    } catch(err) {
+      res.status(400)
+      res.json(err)
     }
-
-    conn.release()
-  } catch (err) {
-    throw new Error(`${err}`)
-  }
-
-  try {
-    const sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *'
-    //@ts-ignore
-    const conn = await Client.connect()
-
-    const result = await conn
-        .query(sql, [quantity, orderId, productId])
-
-    const order = result.rows[0]
-
-    conn.release()
-
-    return order
-  } catch (err) {
-    throw new Error(`Could not add product ${productId} to order ${orderId}: ${err}`)
-  }
   } 
