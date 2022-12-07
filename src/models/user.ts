@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 export type User = {
   id?: Number;
   first_name: string;
-  seconde_name: string;
+  last_name: string;
   password: string;
 };
 
@@ -39,7 +39,7 @@ export class UserSrore {
     // post /users --> create new user as signup feature
     try {
       const sql =
-        "INSERT INTO users (first_name, seconde_name, password_digest) VALUES ($1, $2, $3) RETURNING *";
+        "INSERT INTO users (first_name, last_name, password_digest) VALUES ($1, $2, $3) RETURNING *";
       const hash = bcrypt.hashSync(
         u.password + process.env.BCRYPT_PASSWORD,
         parseInt(process.env.SALT_ROUNDS as string)
@@ -48,11 +48,10 @@ export class UserSrore {
       const conn = await Client.connect();
       const result = await conn.query(sql, [
         u.first_name,
-        u.seconde_name,
+        u.last_name,
         hash,
       ]);
       const user = result.rows[0];
-      console.log('result', result)
       conn.release();
       return user;
     } catch (err) {
@@ -64,8 +63,8 @@ export class UserSrore {
     // as signin feature
     const conn = await Client.connect();
     const sql =
-      "SELECT password_digest FROM users WHERE first_name=($1) AND seconde_name=($2)";
-    const result = await conn.query(sql, [u.first_name, u.seconde_name]);
+      "SELECT password_digest FROM users WHERE first_name=($1) AND last_name=($2)";
+    const result = await conn.query(sql, [u.first_name, u.last_name]);
 
     if (result.rows.length) {
       const user = result.rows[0];

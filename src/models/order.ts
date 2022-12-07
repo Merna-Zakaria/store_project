@@ -23,14 +23,12 @@ export class OrderSrore {
         const conn = await Client.connect();
         const result = await conn.query(sqlOrderInfo, [o.user_id, o.status]);
         const order = result.rows[0];
-        console.log('order created', order, 'o.products', JSON.stringify(o.products))
         if(order.id){
           let sql = o.products?.map(item => `(${item.quantity}, ${order.id}, ${item.id})`)
           const finalQuery = "INSERT INTO order_products (quantity, order_id, product_id) VALUES " + sql
 
         const result = await conn.query(finalQuery);
       }
-      console.log('result', result)
       conn.release();
       return order;
     } catch (err) {

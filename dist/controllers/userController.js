@@ -79,7 +79,7 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 _a.trys.push([0, 2, , 3]);
                 user = {
                     first_name: req.body.first_name,
-                    seconde_name: req.body.seconde_name,
+                    last_name: req.body.last_name,
                     password: req.body.password
                 };
                 return [4 /*yield*/, store.create(user)];
@@ -107,14 +107,23 @@ var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0
                 _a.trys.push([0, 2, , 3]);
                 user = {
                     first_name: req.body.first_name,
-                    seconde_name: req.body.seconde_name,
+                    last_name: req.body.last_name,
                     password: req.body.password
                 };
                 return [4 /*yield*/, store.authenticate(user)];
             case 1:
                 userLoggedIn = _a.sent();
-                token = jsonwebtoken_1["default"].sign({ user: userLoggedIn }, process.env.TOKEN_SECRET);
-                res.json(token);
+                if (userLoggedIn) {
+                    token = jsonwebtoken_1["default"].sign({ user: userLoggedIn }, process.env.TOKEN_SECRET);
+                    res.json({
+                        first_name: req.body.first_name,
+                        last_name: req.body.last_name,
+                        token: token
+                    });
+                }
+                else {
+                    res.send("Incorrect user name or password");
+                }
                 return [3 /*break*/, 3];
             case 2:
                 err_2 = _a.sent();
@@ -127,17 +136,16 @@ var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0
 }); };
 exports.authenticate = authenticate;
 var verifyAuthToken = function (req, res, next) {
-    console.log('process.env.TOKEN_SECRET', process.env.TOKEN_SECRET);
     try {
         var authorizationHeader = req.headers.authorization;
-        var token = authorizationHeader === null || authorizationHeader === void 0 ? void 0 : authorizationHeader.split(' ')[1];
+        var token = authorizationHeader === null || authorizationHeader === void 0 ? void 0 : authorizationHeader.split(" ")[1];
         var decoded = jsonwebtoken_1["default"].verify(token, process.env.TOKEN_SECRET);
         next();
     }
     catch (error) {
         res.status(401);
         console.log(error);
-        res.json('Access denied, invalid token');
+        res.json("Access denied, invalid token");
     }
 };
 exports.verifyAuthToken = verifyAuthToken;

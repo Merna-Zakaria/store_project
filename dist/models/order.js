@@ -60,7 +60,6 @@ var OrderSrore = /** @class */ (function () {
                     case 2:
                         result = _b.sent();
                         order_1 = result.rows[0];
-                        console.log('order created', order_1, 'o.products', JSON.stringify(o.products));
                         if (!order_1.id) return [3 /*break*/, 4];
                         sql = (_a = o.products) === null || _a === void 0 ? void 0 : _a.map(function (item) { return "(".concat(item.quantity, ", ").concat(order_1.id, ", ").concat(item.id, ")"); });
                         finalQuery = "INSERT INTO order_products (quantity, order_id, product_id) VALUES " + sql;
@@ -69,7 +68,6 @@ var OrderSrore = /** @class */ (function () {
                         result_1 = _b.sent();
                         _b.label = 4;
                     case 4:
-                        console.log('result', result);
                         conn.release();
                         return [2 /*return*/, order_1];
                     case 5:

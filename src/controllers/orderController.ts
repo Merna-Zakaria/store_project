@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
 import {Order, OrderSrore} from "../models/order"
-import jwt, { Secret } from 'jsonwebtoken'
 import dotenv from "dotenv";
 
 dotenv.config();

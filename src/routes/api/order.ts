@@ -1,4 +1,3 @@
-
 import express from "express";
 import { addProduct, create} from "../../controllers/orderController";
 const orderRouter = express.Router();
