@@ -86,7 +86,11 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
             case 1:
                 newUser = _a.sent();
                 token = jsonwebtoken_1["default"].sign({ user: newUser }, process.env.TOKEN_SECRET);
-                res.json(token);
+                res.json({
+                    first_name: req.body.first_name,
+                    last_name: req.body.last_name,
+                    token: token
+                });
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();

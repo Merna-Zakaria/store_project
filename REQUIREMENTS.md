@@ -5,16 +5,17 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 #### Products
-- Index 
-- Show
-- Create [token required]
+- Index 'products' [GET] 
+- Show  'products/:id' [GET] 
+- Create [token required]  'products' [POST] 
 - [OPTIONAL] Top 5 most popular products 
 - [OPTIONAL] Products by category (args: product category)
-
+Table: products (id SERIAL PRIMARY KEY, name VARCHAR(64) NOT NULL, price integer NOT   NULL) 
 #### Users
-- Index [token required]
-- Show [token required]
-- Create N[token required]
+- Index [token required] 'users' [GET]
+- Show [token required]  'users/:id' [GET]
+- Create N[token required]  'users' [POST]
+Table: users (id SERIAL PRIMARY KEY, first_name VARCHAR(100), last_name VARCHAR(100), password_digest text);
 
 #### Orders
 - Current Order by user (args: user id)[token required]

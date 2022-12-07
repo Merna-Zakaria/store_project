@@ -39,13 +39,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.UserSrore = void 0;
+exports.productSrore = void 0;
 var database_1 = __importDefault(require("../database"));
-var bcrypt_1 = __importDefault(require("bcrypt"));
-var UserSrore = /** @class */ (function () {
-    function UserSrore() {
+var productSrore = /** @class */ (function () {
+    function productSrore() {
     }
-    UserSrore.prototype.index = function () {
+    productSrore.prototype.index = function () {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_1;
             return __generator(this, function (_a) {
@@ -55,7 +54,7 @@ var UserSrore = /** @class */ (function () {
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = "SELECT * FROM users";
+                        sql = "SELECT * FROM products";
                         return [4 /*yield*/, conn.query(sql)];
                     case 2:
                         result = _a.sent();
@@ -63,20 +62,20 @@ var UserSrore = /** @class */ (function () {
                         return [2 /*return*/, result.rows];
                     case 3:
                         err_1 = _a.sent();
-                        throw new Error("can not get users. Error_model: ".concat(err_1));
+                        throw new Error("can not get products. Error_model: ".concat(err_1));
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    UserSrore.prototype.show = function (id) {
+    productSrore.prototype.show = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var sql, conn, result, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = "SELECT * FROM users WHERE id=($1)";
+                        sql = "SELECT * FROM products WHERE id=($1)";
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
@@ -87,103 +86,39 @@ var UserSrore = /** @class */ (function () {
                         return [2 /*return*/, result.rows[0]];
                     case 3:
                         err_2 = _a.sent();
-                        throw new Error("Could not find user ".concat(id, ". Error_model: ").concat(err_2));
+                        throw new Error("Could not find product ".concat(id, ". Error_model: ").concat(err_2));
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    UserSrore.prototype.create = function (u) {
+    productSrore.prototype.create = function (p) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, hash, conn, result, user, err_3;
+            var sql, conn, result, product, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = "INSERT INTO users (first_name, last_name, password_digest) VALUES ($1, $2, $3) RETURNING *";
-                        hash = bcrypt_1["default"].hashSync(u.password + process.env.BCRYPT_PASSWORD, parseInt(process.env.SALT_ROUNDS));
+                        sql = "INSERT INTO products (name, price) VALUES ($1, $2) RETURNING *";
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
                         return [4 /*yield*/, conn.query(sql, [
-                                u.first_name,
-                                u.last_name,
-                                hash,
+                                p.name, p.price
                             ])];
                     case 2:
                         result = _a.sent();
-                        user = result.rows[0];
+                        product = result.rows[0];
                         conn.release();
-                        return [2 /*return*/, user];
+                        return [2 /*return*/, product];
                     case 3:
                         err_3 = _a.sent();
-                        throw new Error("Could not add new user. Error_model: ".concat(err_3));
+                        throw new Error("Could not add new product. Error_model: ".concat(err_3));
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    UserSrore.prototype.authenticate = function (u) {
-        return __awaiter(this, void 0, void 0, function () {
-            var conn, sql, result, user;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        conn = _a.sent();
-                        sql = "SELECT password_digest FROM users WHERE first_name=($1) AND last_name=($2)";
-                        return [4 /*yield*/, conn.query(sql, [u.first_name, u.last_name])];
-                    case 2:
-                        result = _a.sent();
-                        if (result.rows.length) {
-                            user = result.rows[0];
-                            if (bcrypt_1["default"].compareSync(u.password + process.env.BCRYPT_PASSWORD, user.password_digest)) {
-                                return [2 /*return*/, user];
-                            }
-                        }
-                        conn.release();
-                        return [2 /*return*/, null];
-                }
-            });
-        });
-    };
-    //   async edit(id: string): Promise<User> {  // PUT OR PATCH /users/:id --> update single user
-    //     try {
-    //     const sql = 'SELECT * FROM users WHERE id=($1)'
-    //     // @ts-ignore
-    //     const conn = await Client.connect()
-    //     const result = await conn.query(sql, [id])
-    //     conn.release()
-    //     return result.rows[0]
-    //     } catch (err) {
-    //         throw new Error(`Could not find user ${id}. Error: ${err}`)
-    //     }
-    //   }
-    UserSrore.prototype["delete"] = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, user, err_4;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        sql = "DELETE FROM users WHERE id=($1)";
-                        return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [id])];
-                    case 2:
-                        result = _a.sent();
-                        user = result.rows[0];
-                        conn.release();
-                        return [2 /*return*/, user];
-                    case 3:
-                        err_4 = _a.sent();
-                        throw new Error("Could not delete user ".concat(id, ". Error_model: ").concat(err_4));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    return UserSrore;
+    return productSrore;
 }());
-exports.UserSrore = UserSrore;
+exports.productSrore = productSrore;

@@ -18,7 +18,7 @@ export class UserSrore {
       conn.release();
       return result.rows;
     } catch (err) {
-      throw new Error(`can not get users ${err}`);
+      throw new Error(`can not get users. Error_model: ${err}`);
     }
   }
   async show(id: string): Promise<User> {
@@ -31,7 +31,7 @@ export class UserSrore {
       conn.release();
       return result.rows[0];
     } catch (err) {
-      throw new Error(`Could not find book ${id}. Error: ${err}`);
+      throw new Error(`Could not find user ${id}. Error_model: ${err}`);
     }
   }
 
@@ -55,7 +55,7 @@ export class UserSrore {
       conn.release();
       return user;
     } catch (err) {
-      throw new Error(`Could not add new user. Error: ${err}`);
+      throw new Error(`Could not add new user. Error_model: ${err}`);
     }
   }
 
@@ -106,7 +106,7 @@ export class UserSrore {
       conn.release();
       return user;
     } catch (err) {
-      throw new Error(`Could not delete user ${id}. Error: ${err}`);
+      throw new Error(`Could not delete user ${id}. Error_model: ${err}`);
     }
   }
 }
