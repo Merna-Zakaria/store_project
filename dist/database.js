@@ -11,7 +11,7 @@ var Client = new pg_1.Pool;
 if (ENV === 'test') {
     Client = new pg_1.Pool({
         host: POSTGRES_HOST,
-        database: POSTGRES_DB,
+        database: POSTGRES_TEST_DB,
         user: POSTGRES_USER,
         password: POSTGRESS_PASSWORD
     });
@@ -20,7 +20,6 @@ if (ENV === 'dev') {
     Client = new pg_1.Pool({
         host: POSTGRES_HOST,
         database: POSTGRES_DB,
-        //  database: POSTGRES_TEST_DB, //use in testiong
         user: POSTGRES_USER,
         password: POSTGRESS_PASSWORD
     });
