@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.addProduct = exports.create = void 0;
+exports.getCompleteOrders = exports.getCurrentOrder = exports.addProduct = exports.create = void 0;
 var order_1 = require("../models/order");
 var dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1["default"].config();
@@ -62,9 +62,8 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
+                res.json("Could not add order. Error_controller: ".concat(err_1));
                 res.status(400);
-                console.log(err_1);
-                res.json(err_1);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -89,11 +88,59 @@ var addProduct = function (_req, res) { return __awaiter(void 0, void 0, void 0,
                 return [3 /*break*/, 4];
             case 3:
                 err_2 = _a.sent();
+                res.json("Could not add product. Error_controller: ".concat(err_2));
                 res.status(400);
-                res.json(err_2);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 exports.addProduct = addProduct;
+var getCurrentOrder = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userId, currentOrder, err_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                userId = _req.params.userId;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, store.getCurrentOrder(userId)];
+            case 2:
+                currentOrder = _a.sent();
+                res.json(currentOrder);
+                return [3 /*break*/, 4];
+            case 3:
+                err_3 = _a.sent();
+                res.json("Could not find current order. Error_controller: ".concat(err_3));
+                res.status(400);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.getCurrentOrder = getCurrentOrder;
+var getCompleteOrders = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userId, completeOrders, err_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                userId = _req.params.userId;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, store.getCompleteOrders(userId)];
+            case 2:
+                completeOrders = _a.sent();
+                res.json(completeOrders);
+                return [3 /*break*/, 4];
+            case 3:
+                err_4 = _a.sent();
+                res.json("Could not find compelete orders. Error_controller: ".concat(err_4));
+                res.status(400);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.getCompleteOrders = getCompleteOrders;

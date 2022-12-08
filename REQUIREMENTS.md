@@ -16,11 +16,12 @@ Table: products (id SERIAL PRIMARY KEY, name VARCHAR(64) NOT NULL, price integer
 - Show [token required]  'users/:id' [GET]
 - Create N[token required]  'users' [POST]
 Table: users (id SERIAL PRIMARY KEY, first_name VARCHAR(100), last_name VARCHAR(100), password_digest text);
-
 #### Orders
-- Current Order by user (args: user id)[token required]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
-
+- Current Order by user (args: user id)[token required] 'orders/current/:userId' [GET]
+- [OPTIONAL] Completed Orders by user (args: user id)[token required] 
+'orders/complete/:userId' [GET]
+Tabel: orders (id SERIAL PRIMARY KEY, status VARCHAR(15), user_id bigint REFERENCES users(id));
+Inner join table: order_products (id SERIAL PRIMARY KEY, quantity integer, order_id bigint REFERENCES orders(id), product_id bigint REFERENCES products(id));
 ## Data Shapes
 #### Product
 -  id

@@ -2,11 +2,11 @@ import Client from '../database'
 
 export class DashboardQueries {
   // Get all products that have been included in orders
-  async productsInOrders(): Promise<{name: string, price: number, order_id: string}[]> {
+  async productsInOrders(): Promise<{name: string,quantity: number, price: number, order_id: number}[]> {
     try {
       //@ts-ignore
       const conn = await Client.connect()
-      const sql = 'SELECT name, price, order_id FROM products INNER JOIN order_products ON products.id = order_products.product_id'
+      const sql = 'SELECT name, quantity, price, order_id FROM products INNER JOIN order_products ON products.id = order_products.product_id'
       const result = await conn.query(sql)
       conn.release()
       return result.rows

@@ -55,7 +55,7 @@ var DashboardQueries = /** @class */ (function () {
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'SELECT name, price, order_id FROM products INNER JOIN order_products ON products.id = order_products.product_id';
+                        sql = 'SELECT name, quantity, price, order_id FROM products INNER JOIN order_products ON products.id = order_products.product_id';
                         return [4 /*yield*/, conn.query(sql)];
                     case 2:
                         result = _a.sent();
