@@ -4,18 +4,12 @@ const store = new UserSrore()
 
 describe('user model', () => {
     const user = {
-        first_name: "test",
-        last_name: "test",
+        first_name: "test_user",
+        last_name: "test_user",
         password: "2345",
     } 
 
     beforeAll(async () => {
-        const user:User = {
-            id: 1,
-            first_name: "merna",
-            last_name: "zakaria",
-            password: "1234",
-        }
         await store.create(user)
     })
 
