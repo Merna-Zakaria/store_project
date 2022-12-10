@@ -3,69 +3,54 @@ import {User, UserSrore} from "../user"
 const store = new UserSrore()
 
 describe('user model', () => {
+    const user = {
+        first_name: "test",
+        last_name: "test",
+        password: "2345",
+    } 
+
+    beforeAll(async () => {
+        const user:User = {
+            id: 1,
+            first_name: "merna",
+            last_name: "zakaria",
+            password: "1234",
+        }
+        await store.create(user)
+    })
+
     it('should have an index method', () => {
         expect(store.index).toBeDefined()
     })
+    
     it('index method should return a list of users', async() => {
         const result = await store.index()
-        expect(result).toEqual([])
+        expect(result.length).toBeGreaterThanOrEqual(1)
     })
 
-    
-//   it('should have a show method', () => {
-//     expect(store.index).toBeDefined();
-//   });
+    it('should have an show method', () => {
+        expect(store.show).toBeDefined()
+    })
 
-//   it('should have a create method', () => {
-//     expect(store.index).toBeDefined();
-//   });
+    it('show method should return user', async() => {
+        const result = await store.show('1')
+        expect(result.id).toEqual(1)
+    })
 
-//   it('should have a update method', () => {
-//     expect(store.index).toBeDefined();
-//   });
+    it('create method should return user', async() => {
+        const user = {
+            first_name: "test",
+            last_name: "test",
+            password: "2345",
+        }
+        const result = await store.create(user)
+        expect(result.first_name).toEqual("test")
+    })
 
-//   it('should have a delete method', () => {
-//     expect(store.index).toBeDefined();
-//   });
-
-//   it('create method should add a book', async () => {
-//     const result = await store.create({
-//       title: 'Bridge to Terabithia',
-//       total_pages: 250,
-//       author: 'Katherine Paterson',
-//       type: 'Childrens'
-//     });
-//     expect(result).toEqual({
-//       id: "1",
-//       title: 'Bridge to Terabithia',
-//       total_pages: 250,
-//       author: 'Katherine Paterson',
-//       type: 'Childrens'
-//     });
-//   });
-
-//   it('index method should return a list of books', async () => {
-//     const result = await store.index();
-//     expect(result).toEqual([{
-//       id: "1",
-//       title: 'Bridge to Terabithia',
-//       total_pages: 250,
-//       author: 'Katherine Paterson',
-//       type: 'Childrens'
-//     }]);
-//   });
-
-//   it('show method should return the correct book', async () => {
-//     const result = await store.show("1");
-//     expect(result).toEqual({
-//       id: "1",
-//       title: 'Bridge to Terabithia',
-//       total_pages: 250,
-//       author: 'Katherine Paterson',
-//       type: 'Childrens'
-//     });
-//   });
-
+    it('authenticate method should return user', async() => {
+        const result = await store.authenticate(user)
+        expect(result).not.toBeNull()
+    })
 //   it('delete method should remove the book', async () => {
 //     store.delete("1");
 //     const result = await store.index()
