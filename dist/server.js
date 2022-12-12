@@ -19,6 +19,7 @@ app.use("/api", routes_1["default"]);
 app.get('/', function (req, res) {
     res.send('Hello World!');
 });
-app.listen(3000, function () {
+var server = app.listen(3000, function () {
     console.log("starting app on: ".concat(address));
 });
+module.exports = server;
