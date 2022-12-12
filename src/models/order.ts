@@ -10,7 +10,12 @@ export type Order = {
   products?: Array<Product>;
   status?: "active" | "complete";
 };
-
+export type OrderPrducts = {
+  id?: number;
+  order_id: string;
+  quantity: number;
+  product_id: string;
+};
 export class OrderSrore {
   async create(o: Order): Promise<Order> {
     try {
@@ -42,7 +47,7 @@ export class OrderSrore {
     quantity: number,
     orderId: string,
     productId: string
-  ): Promise<Order> {
+  ): Promise<OrderPrducts> {
     // get order to see if it is active
     try {
       const ordersql = "SELECT * FROM orders WHERE id=($1)";
