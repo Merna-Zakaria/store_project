@@ -98,7 +98,6 @@ export class OrderSrore {
         let sql = "SELECT * FROM order_products WHERE order_id = ($1)";
         const result = await conn.query(sql, [orderId]);
         const products = result.rows;
-        console.log('orderId', orderId, 'products', products)
         currentOrder = { id: orderId, user_id: userId, products: products };
       }
       conn.release();

@@ -146,7 +146,6 @@ var OrderSrore = /** @class */ (function () {
                     case 3:
                         result_2 = _c.sent();
                         products = result_2.rows;
-                        console.log('orderId', orderId, 'products', products);
                         currentOrder = { id: orderId, user_id: userId, products: products };
                         _c.label = 4;
                     case 4:
