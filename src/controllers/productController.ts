@@ -27,11 +27,11 @@ export const show = async (req: Request, res: Response) => {
 
 export const create = async (req: Request, res: Response) => {
   try {
-    const user = {
-      name: req.body.name,
-      price: req.body.price,
+    const product = {
+      name: req.body.product.name,
+      price: req.body.product.price,
     };
-    const newProduct = await store.create(user);
+    const newProduct = await store.create(product);
     res.json(newProduct);
   } catch (err) {
     res.json(`Could not add new product. Error_controller: ${err}`);

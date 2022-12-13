@@ -43,6 +43,7 @@ export class productSrore {
      p.name, p.price
       ]);
       const product = result.rows[0];
+      // console.log('product', product)
       conn.release();
       return product;
     } catch (err) {

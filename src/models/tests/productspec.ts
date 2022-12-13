@@ -7,9 +7,9 @@ describe('product model', () => {
         name: "test_product",
         price: 5,
     } 
-
+    let productCreated: Product 
     beforeAll(async () => {
-        await store.create(product)
+        productCreated =  await store.create(product)
     })
 
     it('should have an index method', () => {
@@ -26,8 +26,9 @@ describe('product model', () => {
     })
 
     it('show method should return product', async() => {
-        const result = await store.show('1')
-        expect(result.id).toEqual(1)
+        const pdtId = productCreated.id
+        const result = await store.show(JSON.stringify(pdtId))
+        expect(result.id).toEqual((pdtId))
     })
 
     it('create method should return product', async() => {

@@ -37,6 +37,7 @@ export class OrderSrore {
         const result = await conn.query(finalQuery);
       }
       conn.release();
+      // console.log('order', order)
       return order;
     } catch (err) {
       throw new Error(`Could not add new order. Error_model: ${err}`);
@@ -84,27 +85,48 @@ export class OrderSrore {
     }
   }
 
-  async getCurrentOrder(userId: string): Promise<Order | undefined> {
+  async getCurrentOrder(userId: string): Promise<Order | null> {
+    let products, orderId;
     try {
-      let currentOrder;
-      const sql = "SELECT id FROM orders WHERE user_id = ($1)";
+      // const currentOrder: Order ;
+      
+      const conn = await Client.connect();
+      const orderSql = "SELECT id FROM orders WHERE user_id = ($1)";
 
       // @ts-ignore
-      const conn = await Client.connect();
-      const result = await conn.query(sql, [userId]);
-      const currentOrderIndex = result.rows?.length - 1;
-      const orderId = result.rows[currentOrderIndex]?.id;
-      if (orderId) {
-        let sql = "SELECT * FROM order_products WHERE order_id = ($1)";
-        const result = await conn.query(sql, [orderId]);
-        const products = result.rows;
-        currentOrder = { id: orderId, user_id: userId, products: products };
-      }
+      const Idresult = await conn.query(orderSql, [userId]);
+      const currentOrderIndex = Idresult.rows.length - 1;
+      orderId = Idresult.rows[currentOrderIndex]?.id;
+      let sql = "SELECT * FROM order_products WHERE order_id = ($1)";
+      const result = await conn.query(sql, [orderId]);
+       products = result.rows;
+      const currentOrder = { id: orderId, user_id: userId, products: products?.map(pdt => ({id:pdt.product_id, quantity:pdt.quantity})) };
+      console.log('model', currentOrder)
+      // console.log('hiiiiiiiiiiiiiiiiiiii', currentOrder)
       conn.release();
-      return currentOrder;
+      return currentOrder
+   
     } catch (err) {
+      console.log('err model', err)
       throw new Error(`Could not get current order. Error_model: ${err}`);
     }
+
+    // try {
+    //   const conn = await Client.connect();
+
+    //   let sql = "SELECT * FROM order_products WHERE order_id = ($1)";
+    //   const result = await conn.query(sql, [orderId]);
+    //    products = result.rows;
+    //   const currentOrder = { id: orderId, user_id: userId, products: products?.map(pdt => ({id:pdt.product_id, quantity:pdt.quantity})) };
+    //   // console.log('model', userId, 'orderId', orderId, 'currentOrder', currentOrder)
+    //   console.log('hiiiiiiiiiiiiiiiiiiii', currentOrder)
+    //   conn.release();
+    //   return currentOrder;
+    // }
+    // catch(err){
+    //   throw new Error(`Could not get current order. Error_model: ${err}`);
+
+    // }
   }
 
   async getCompleteOrders(userId: string): Promise<Order[] | undefined> {

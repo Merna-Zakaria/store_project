@@ -20,15 +20,16 @@ export const show = async (req: Request, res: Response) => {
 export const create = async (req: Request, res: Response) => {
   try {
     const user = {
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      password: req.body.password,
+      first_name: req.body.user.first_name,
+      last_name: req.body.user.last_name,
+      password: req.body.user.password,
     };
     const newUser = await store.create(user);
     let token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET as Secret);
     res.json({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
+      id: newUser.id,
+      first_name: newUser.first_name,
+      last_name: newUser.last_name,
       token,
     });
   } catch (err) {

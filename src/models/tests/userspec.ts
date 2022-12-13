@@ -8,9 +8,10 @@ describe('user model', () => {
         last_name: "test_user",
         password: "2345",
     } 
+    let userCreated:User
 
     beforeAll(async () => {
-        await store.create(user)
+        userCreated = await store.create(user)
     })
 
     it('should have an index method', () => {
@@ -27,8 +28,9 @@ describe('user model', () => {
     })
 
     it('show method should return user', async() => {
-        const result = await store.show('1')
-        expect(result.id).toEqual(1)
+        const userId = userCreated.id
+        const result = await store.show(JSON.stringify(userId))
+        expect(result.id).toEqual(userId)
     })
 
     it('create method should return user', async() => {
@@ -45,7 +47,7 @@ describe('user model', () => {
         const result = await store.authenticate(user)
         expect(result).not.toBeNull()
     })
-//   it('delete method should remove the book', async () => {
+//   it('delete method should remove the user', async () => {
 //     store.delete("1");
 //     const result = await store.index()
 

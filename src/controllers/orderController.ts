@@ -13,7 +13,8 @@ export const create = async (req: Request, res: Response) => {
             products: req.body.products,
             status: req.body.status
           };
-        const orderCreated = await store.create(order)
+          const orderCreated = await store.create(order)
+          // console.log('req.body', req.body)
         res.json(orderCreated)
     } catch(err) {
       res.json(
@@ -44,8 +45,10 @@ export const create = async (req: Request, res: Response) => {
   
     try {
       const currentOrder = await store.getCurrentOrder(userId)
+      console.log('controller',currentOrder, userId)
       res.json(currentOrder)
     } catch(err) {
+      console.log('error', err)
       res.json(
         `Could not find current order. Error_controller: ${err}`
       );
