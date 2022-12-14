@@ -109,6 +109,7 @@ var productSrore = /** @class */ (function () {
                     case 2:
                         result = _a.sent();
                         product = result.rows[0];
+                        // console.log('product', product)
                         conn.release();
                         return [2 /*return*/, product];
                     case 3:

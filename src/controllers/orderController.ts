@@ -45,7 +45,7 @@ export const create = async (req: Request, res: Response) => {
   
     try {
       const currentOrder = await store.getCurrentOrder(userId)
-      console.log('controller',currentOrder, userId)
+      // console.log('controller',currentOrder, userId)
       res.json(currentOrder)
     } catch(err) {
       console.log('error', err)

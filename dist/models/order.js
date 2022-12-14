@@ -70,6 +70,7 @@ var OrderSrore = /** @class */ (function () {
                         _b.label = 4;
                     case 4:
                         conn.release();
+                        // console.log('order', order)
                         return [2 /*return*/, order_1];
                     case 5:
                         err_1 = _b.sent();
@@ -123,38 +124,37 @@ var OrderSrore = /** @class */ (function () {
         });
     };
     OrderSrore.prototype.getCurrentOrder = function (userId) {
-        var _a, _b;
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var currentOrder, sql, conn, result, currentOrderIndex, orderId, sql_1, result_2, products, err_4;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var products, orderId, conn, orderSql, Idresult, currentOrderIndex, sql, result, currentOrder, err_4;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        _c.trys.push([0, 5, , 6]);
-                        currentOrder = void 0;
-                        sql = "SELECT id FROM orders WHERE user_id = ($1)";
+                        _b.trys.push([0, 4, , 5]);
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
-                        conn = _c.sent();
-                        return [4 /*yield*/, conn.query(sql, [userId])];
+                        conn = _b.sent();
+                        orderSql = "SELECT id FROM orders WHERE user_id = ($1)";
+                        return [4 /*yield*/, conn.query(orderSql, [userId])];
                     case 2:
-                        result = _c.sent();
-                        currentOrderIndex = ((_a = result.rows) === null || _a === void 0 ? void 0 : _a.length) - 1;
-                        orderId = (_b = result.rows[currentOrderIndex]) === null || _b === void 0 ? void 0 : _b.id;
-                        if (!orderId) return [3 /*break*/, 4];
-                        sql_1 = "SELECT * FROM order_products WHERE order_id = ($1)";
-                        return [4 /*yield*/, conn.query(sql_1, [orderId])];
+                        Idresult = _b.sent();
+                        currentOrderIndex = Idresult.rows.length - 1;
+                        orderId = (_a = Idresult.rows[currentOrderIndex]) === null || _a === void 0 ? void 0 : _a.id;
+                        sql = "SELECT * FROM order_products WHERE order_id = ($1)";
+                        return [4 /*yield*/, conn.query(sql, [orderId])];
                     case 3:
-                        result_2 = _c.sent();
-                        products = result_2.rows;
-                        currentOrder = { id: orderId, user_id: userId, products: products };
-                        _c.label = 4;
-                    case 4:
+                        result = _b.sent();
+                        products = result.rows;
+                        currentOrder = { id: orderId, user_id: userId, products: products === null || products === void 0 ? void 0 : products.map(function (pdt) { return ({ id: pdt.product_id, quantity: pdt.quantity }); }) };
+                        // console.log('model', currentOrder);
+                        // console.log('hiiiiiiiiiiiiiiiiiiii', currentOrder)
                         conn.release();
                         return [2 /*return*/, currentOrder];
-                    case 5:
-                        err_4 = _c.sent();
+                    case 4:
+                        err_4 = _b.sent();
+                        console.log('err model', err_4);
                         throw new Error("Could not get current order. Error_model: ".concat(err_4));
-                    case 6: return [2 /*return*/];
+                    case 5: return [2 /*return*/];
                 }
             });
         });

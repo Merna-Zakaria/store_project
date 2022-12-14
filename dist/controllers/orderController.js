@@ -55,9 +55,12 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                     products: req.body.products,
                     status: req.body.status
                 };
-                return [4 /*yield*/, store.create(order)];
+                return [4 /*yield*/, store.create(order)
+                    // console.log('req.body', req.body)
+                ];
             case 1:
                 orderCreated = _a.sent();
+                // console.log('req.body', req.body)
                 res.json(orderCreated);
                 return [3 /*break*/, 3];
             case 2:
@@ -108,10 +111,12 @@ var getCurrentOrder = function (_req, res) { return __awaiter(void 0, void 0, vo
                 return [4 /*yield*/, store.getCurrentOrder(userId)];
             case 2:
                 currentOrder = _a.sent();
+                console.log('controller', currentOrder, userId);
                 res.json(currentOrder);
                 return [3 /*break*/, 4];
             case 3:
                 err_3 = _a.sent();
+                console.log('error', err_3);
                 res.json("Could not find current order. Error_controller: ".concat(err_3));
                 res.status(400);
                 return [3 /*break*/, 4];

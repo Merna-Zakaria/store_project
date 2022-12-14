@@ -1,21 +1,23 @@
+import { User } from "../../models/user";
+import { setupTestDatabase } from "../../utils/testUtils"
 const userRequest = require("supertest");
 
 describe("user controller", () => {
   let server: unknown;
-  let userRes: { _body: any; status: number}
-  let token: string
-  beforeAll(async function () {
-    let user = {
-        first_name: 'm',
-        last_name: 'z',
-        password: '1234'
-    }
+  let dbResult;
+  let userRes: User;
+  let userPayload: User;
+  let token: string;
+  beforeAll(async () => {
     server = require("../../server");
-    userRes = await userRequest(server).post("/api/users").send({user});
-    token =`Bearer ${userRes._body?.token}`
+    dbResult = await setupTestDatabase()
+    userRes = dbResult.userCreated;
+    userPayload = dbResult.userPayload;
+    token = dbResult.token
+    
   });
 
-  it("responds to get users list /api/users", async () => {
+  it("should get users list /api/users", async () => {
     let response
     //  response = await userRequest(server).get("/api/users");
     // expect(response.status).toEqual(401);
@@ -26,20 +28,16 @@ describe("user controller", () => {
 
   });
 
-  it("responds to /api/users/:id", async () => {
-    let usersRes, singleUserRes
-    usersRes = await userRequest(server).get("/api/users").set({ Authorization: token });
-    singleUserRes = await userRequest(server).get(`/api/users/${usersRes._body[0].id}`).set({ Authorization: token });
-
+  it("should get single user  /api/users/:id", async () => {
+    let singleUserRes = await userRequest(server).get(`/api/users/${userRes.id}`).set({ Authorization: token });
     expect(singleUserRes.status).toEqual(200);
-    expect(singleUserRes._body.id).toEqual(usersRes._body[0].id)
+    expect(singleUserRes._body.id).toEqual(userRes.id)
 
   });
 
-  it("responds to create user /api/users", async () => {
-    expect(userRes.status).toBe(200)
-    expect(userRes._body.first_name).toEqual('m');
-    expect(userRes._body.last_name).toEqual('z');
+  it("should create user /api/users", async () => {
+    expect(userRes.first_name).toEqual(userPayload.first_name);
+    expect(userRes.last_name).toEqual(userPayload.last_name);
 
   });
 });

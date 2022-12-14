@@ -82,16 +82,16 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
 }); };
 exports.show = show;
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, newProduct, err_3;
+    var product, newProduct, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                user = {
-                    name: req.body.name,
-                    price: req.body.price
+                product = {
+                    name: req.body.product.name,
+                    price: req.body.product.price
                 };
-                return [4 /*yield*/, store.create(user)];
+                return [4 /*yield*/, store.create(product)];
             case 1:
                 newProduct = _a.sent();
                 res.json(newProduct);

@@ -8,62 +8,77 @@ dotenv.config();
 const store = new UserSrore();
 
 export const index = async (_req: Request, res: Response) => {
-  const users = await store.index();
-  res.json(users);
+  try {
+    const users = await store.index();
+  res.status(200).json(users);
+  } catch (err) {
+    res.status(400).json(`${err}`);
+  }
+
 };
 
 export const show = async (req: Request, res: Response) => {
-  const user = await store.show(req.params.id);
-  res.json(user);
+  try {
+    const user = await store.show(req.params.id);
+      res.status(200).json(user);
+  } catch (err) {
+    res.status(400).json(`${err}`);
+  }
+
 };
 
 export const create = async (req: Request, res: Response) => {
   try {
-    const user = {
-      first_name: req.body.user.first_name,
-      last_name: req.body.user.last_name,
-      password: req.body.user.password,
-    };
-    const newUser = await store.create(user);
-    let token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET as Secret);
-    res.json({
-      id: newUser.id,
-      first_name: newUser.first_name,
-      last_name: newUser.last_name,
-      token,
-    });
+    const {first_name, last_name, password} = req.body;
+    if(first_name && last_name && password){
+      const user = {
+        first_name,
+        last_name,
+        password,
+      };
+      const newUser = await store.create(user);
+      let token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET as Secret);
+      res.json({
+        id: newUser.id,
+        first_name: newUser.first_name,
+        last_name: newUser.last_name,
+        token,
+      });
+    }else{
+      throw new Error(`Could not add new user.`);
+    }
   } catch (err) {
-    res.status(400);
-    console.log(err);
-    res.json(err);
+    res.status(400).json(`${err}`);
   }
 };
 
 export const authenticate = async (req: Request, res: Response) => {
   try {
-    const user = {
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      password: req.body.password,
-    };
-
-    const userLoggedIn = await store.authenticate(user);
-    if (userLoggedIn) {
-      let token = jwt.sign(
-        { user: userLoggedIn },
-        process.env.TOKEN_SECRET as Secret
-      );
-      res.json({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        token,
-      });
+    const {first_name, last_name, password} = req.body;
+    if(first_name && last_name && password){
+      const user = {
+        first_name,
+        last_name,
+        password,
+      };
+          const userLoggedIn = await store.authenticate(user);
+          if (userLoggedIn) {
+            let token = jwt.sign(
+              { user: userLoggedIn },
+              process.env.TOKEN_SECRET as Secret
+            );
+            res.json({
+              id: userLoggedIn.id,
+              first_name: userLoggedIn.first_name,
+              last_name: userLoggedIn.last_name,
+              token,
+            });
+          } 
     } else {
-      res.send("Incorrect user name or password");
+      throw new Error(`Invalid data entered.`);
     }
   } catch (err) {
-    res.status(400);
-    res.json(err);
+    res.status(400).json(`${err}`);
   }
 };
 
@@ -82,9 +97,7 @@ export const verifyAuthToken = (
 
     next();
   } catch (error) {
-    res.status(401);
-    console.log(error);
-    res.json("Access denied, invalid token");
+    res.status(401).json("Access denied, invalid token");
   }
 };
 

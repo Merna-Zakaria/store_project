@@ -46,95 +46,113 @@ var dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1["default"].config();
 var store = new user_1.UserSrore();
 var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users;
+    var users, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, store.index()];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, store.index()];
             case 1:
                 users = _a.sent();
-                res.json(users);
-                return [2 /*return*/];
+                res.status(200).json(users);
+                return [3 /*break*/, 3];
+            case 2:
+                err_1 = _a.sent();
+                res.status(400).json("".concat(err_1));
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
 exports.index = index;
 var show = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
+    var user, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, store.show(req.params.id)];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, store.show(req.params.id)];
             case 1:
                 user = _a.sent();
-                res.json(user);
-                return [2 /*return*/];
+                res.status(200).json(user);
+                return [3 /*break*/, 3];
+            case 2:
+                err_2 = _a.sent();
+                res.status(400).json("".concat(err_2));
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
 exports.show = show;
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, newUser, token, err_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a, first_name, last_name, password, user, newUser, token, err_3;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _b.trys.push([0, 4, , 5]);
+                _a = req.body, first_name = _a.first_name, last_name = _a.last_name, password = _a.password;
+                if (!(first_name && last_name && password)) return [3 /*break*/, 2];
                 user = {
-                    first_name: req.body.first_name,
-                    last_name: req.body.last_name,
-                    password: req.body.password
+                    first_name: first_name,
+                    last_name: last_name,
+                    password: password
                 };
                 return [4 /*yield*/, store.create(user)];
             case 1:
-                newUser = _a.sent();
+                newUser = _b.sent();
                 token = jsonwebtoken_1["default"].sign({ user: newUser }, process.env.TOKEN_SECRET);
                 res.json({
-                    first_name: req.body.first_name,
-                    last_name: req.body.last_name,
+                    id: newUser.id,
+                    first_name: newUser.first_name,
+                    last_name: newUser.last_name,
                     token: token
                 });
                 return [3 /*break*/, 3];
-            case 2:
-                err_1 = _a.sent();
-                res.status(400);
-                console.log(err_1);
-                res.json(err_1);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+            case 2: throw new Error("Could not add new user.");
+            case 3: return [3 /*break*/, 5];
+            case 4:
+                err_3 = _b.sent();
+                res.status(400).json("".concat(err_3));
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
 exports.create = create;
 var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, userLoggedIn, token, err_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a, first_name, last_name, password, user, userLoggedIn, token, err_4;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _b.trys.push([0, 4, , 5]);
+                _a = req.body, first_name = _a.first_name, last_name = _a.last_name, password = _a.password;
+                if (!(first_name && last_name && password)) return [3 /*break*/, 2];
                 user = {
-                    first_name: req.body.first_name,
-                    last_name: req.body.last_name,
-                    password: req.body.password
+                    first_name: first_name,
+                    last_name: last_name,
+                    password: password
                 };
                 return [4 /*yield*/, store.authenticate(user)];
             case 1:
-                userLoggedIn = _a.sent();
+                userLoggedIn = _b.sent();
                 if (userLoggedIn) {
                     token = jsonwebtoken_1["default"].sign({ user: userLoggedIn }, process.env.TOKEN_SECRET);
                     res.json({
-                        first_name: req.body.first_name,
-                        last_name: req.body.last_name,
+                        id: userLoggedIn.id,
+                        first_name: userLoggedIn.first_name,
+                        last_name: userLoggedIn.last_name,
                         token: token
                     });
                 }
-                else {
-                    res.send("Incorrect user name or password");
-                }
                 return [3 /*break*/, 3];
-            case 2:
-                err_2 = _a.sent();
-                res.status(400);
-                res.json(err_2);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+            case 2: throw new Error("Invalid data entered.");
+            case 3: return [3 /*break*/, 5];
+            case 4:
+                err_4 = _b.sent();
+                res.status(400).json("".concat(err_4));
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
@@ -147,9 +165,7 @@ var verifyAuthToken = function (req, res, next) {
         next();
     }
     catch (error) {
-        res.status(401);
-        console.log(error);
-        res.json("Access denied, invalid token");
+        res.status(401).json("Access denied, invalid token");
     }
 };
 exports.verifyAuthToken = verifyAuthToken;

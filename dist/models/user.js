@@ -60,10 +60,13 @@ var UserSrore = /** @class */ (function () {
                     case 2:
                         result = _a.sent();
                         conn.release();
-                        return [2 /*return*/, result.rows];
+                        if (result.rows[0].id) {
+                            return [2 /*return*/, result.rows];
+                        }
+                        return [3 /*break*/, 4];
                     case 3:
                         err_1 = _a.sent();
-                        throw new Error("can not get users. Error_model: ".concat(err_1));
+                        throw new Error("can not get users list. ".concat(err_1));
                     case 4: return [2 /*return*/];
                 }
             });
@@ -84,10 +87,13 @@ var UserSrore = /** @class */ (function () {
                     case 2:
                         result = _a.sent();
                         conn.release();
-                        return [2 /*return*/, result.rows[0]];
+                        if (result.rows[0].id) {
+                            return [2 /*return*/, result.rows[0]];
+                        }
+                        return [3 /*break*/, 4];
                     case 3:
                         err_2 = _a.sent();
-                        throw new Error("Could not find user ".concat(id, ". Error_model: ").concat(err_2));
+                        throw new Error("Could not find user ".concat(id, ". ").concat(err_2));
                     case 4: return [2 /*return*/];
                 }
             });
@@ -117,7 +123,7 @@ var UserSrore = /** @class */ (function () {
                         return [2 /*return*/, user];
                     case 3:
                         err_3 = _a.sent();
-                        throw new Error("Could not add new user. Error_model: ".concat(err_3));
+                        throw new Error("Could not add new user. ".concat(err_3));
                     case 4: return [2 /*return*/];
                 }
             });
@@ -125,24 +131,33 @@ var UserSrore = /** @class */ (function () {
     };
     UserSrore.prototype.authenticate = function (u) {
         return __awaiter(this, void 0, void 0, function () {
-            var conn, sql, result, user;
+            var conn, sql, result, user, err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, database_1["default"].connect()];
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = "SELECT password_digest FROM users WHERE first_name=($1) AND last_name=($2)";
+                        sql = "SELECT * FROM users WHERE first_name=($1) AND last_name=($2)";
                         return [4 /*yield*/, conn.query(sql, [u.first_name, u.last_name])];
                     case 2:
                         result = _a.sent();
-                        if (result.rows.length) {
+                        if (result.rows[0].id) {
                             user = result.rows[0];
                             if (bcrypt_1["default"].compareSync(u.password + process.env.BCRYPT_PASSWORD, user.password_digest)) {
                                 return [2 /*return*/, user];
                             }
+                            else {
+                                throw new Error("Invalid password entered");
+                            }
                         }
                         conn.release();
-                        return [2 /*return*/, null];
+                        return [3 /*break*/, 4];
+                    case 3:
+                        err_4 = _a.sent();
+                        throw new Error("Invalid data entered. ".concat(err_4));
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -161,7 +176,7 @@ var UserSrore = /** @class */ (function () {
     //   }
     UserSrore.prototype["delete"] = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, user, err_4;
+            var sql, conn, result, user, err_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -177,8 +192,8 @@ var UserSrore = /** @class */ (function () {
                         conn.release();
                         return [2 /*return*/, user];
                     case 3:
-                        err_4 = _a.sent();
-                        throw new Error("Could not delete user ".concat(id, ". Error_model: ").concat(err_4));
+                        err_5 = _a.sent();
+                        throw new Error("Could not delete user ".concat(id, ". Error_model: ").concat(err_5));
                     case 4: return [2 /*return*/];
                 }
             });
