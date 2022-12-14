@@ -48,12 +48,11 @@ var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, store.index()];
             case 1:
                 products = _a.sent();
-                res.json(products);
+                res.status(200).json(products);
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
-                res.json("can not get products from model. Error_controller: ".concat(err_1));
-                res.status(400);
+                res.status(400).json("".concat(err_1));
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -69,12 +68,11 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                 return [4 /*yield*/, store.show(req.params.id)];
             case 1:
                 product = _a.sent();
-                res.json(product);
+                res.status(200).json(product);
                 return [3 /*break*/, 3];
             case 2:
                 err_2 = _a.sent();
-                res.json("Could not find product ".concat(req.params.id, ". Error_controller: ").concat(err_2));
-                res.status(400);
+                res.status(400).json("".concat(err_2));
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -82,26 +80,29 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
 }); };
 exports.show = show;
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var product, newProduct, err_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a, name_1, price, product, newProduct, err_3;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _b.trys.push([0, 4, , 5]);
+                _a = req.body, name_1 = _a.name, price = _a.price;
+                if (!(name_1 && price)) return [3 /*break*/, 2];
                 product = {
-                    name: req.body.product.name,
-                    price: req.body.product.price
+                    name: name_1,
+                    price: price
                 };
                 return [4 /*yield*/, store.create(product)];
             case 1:
-                newProduct = _a.sent();
+                newProduct = _b.sent();
                 res.json(newProduct);
                 return [3 /*break*/, 3];
-            case 2:
-                err_3 = _a.sent();
-                res.json("Could not add new product. Error_controller: ".concat(err_3));
-                res.status(400);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+            case 2: throw new Error("Could not add new product.");
+            case 3: return [3 /*break*/, 5];
+            case 4:
+                err_3 = _b.sent();
+                res.status(400).json("".concat(err_3));
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

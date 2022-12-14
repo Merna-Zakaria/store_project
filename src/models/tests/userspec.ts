@@ -35,8 +35,8 @@ describe("user model", () => {
 
   it("create method should return user", async () => {
     const result = await store.create({ ...userPayload });
-    expect(result.first_name).toEqual(userPayload.first_name);
-    expect(result.last_name).toBe(userPayload.last_name);
+    expect(result?.first_name).toEqual(userPayload.first_name);
+    expect(result?.last_name).toBe(userPayload.last_name);
   });
 
   it("authenticate method should return user", async () => {

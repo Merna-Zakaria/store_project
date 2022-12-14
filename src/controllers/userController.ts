@@ -39,9 +39,9 @@ export const create = async (req: Request, res: Response) => {
       const newUser = await store.create(user);
       let token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET as Secret);
       res.json({
-        id: newUser.id,
-        first_name: newUser.first_name,
-        last_name: newUser.last_name,
+        id: newUser?.id,
+        first_name: newUser?.first_name,
+        last_name: newUser?.last_name,
         token,
       });
     }else{

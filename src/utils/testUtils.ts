@@ -17,14 +17,23 @@ export const setupTestDatabase = async () => {
     const token =`Bearer ${userCreated.token}`
 
  const productRes = await request(server).post("/api/products").send({...productPayload}).set({ Authorization: token });
- console.log('jjjjjjjjj', productRes)
  const productCreated = productRes._body
- const result = {
+
+ let orderPayload = {
+        user_id: JSON.stringify(userCreated.id),
+        status: 'active',
+        products: [{id: JSON.stringify(productCreated.id), quantity: 5}]
+ } 
+ const orderRes = await request(server).post("/api/orders").send({ orderPayload }).set({ Authorization: token });
+ const orderCreated = orderRes._body
+  const result = {
         userPayload,
         userCreated,
         token,
         productPayload,
-        productCreated
+        productCreated,
+        orderPayload,
+        orderCreated
     }
     return result;
 }

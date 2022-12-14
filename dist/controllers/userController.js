@@ -103,9 +103,9 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 newUser = _b.sent();
                 token = jsonwebtoken_1["default"].sign({ user: newUser }, process.env.TOKEN_SECRET);
                 res.json({
-                    id: newUser.id,
-                    first_name: newUser.first_name,
-                    last_name: newUser.last_name,
+                    id: newUser === null || newUser === void 0 ? void 0 : newUser.id,
+                    first_name: newUser === null || newUser === void 0 ? void 0 : newUser.first_name,
+                    last_name: newUser === null || newUser === void 0 ? void 0 : newUser.last_name,
                     token: token
                 });
                 return [3 /*break*/, 3];

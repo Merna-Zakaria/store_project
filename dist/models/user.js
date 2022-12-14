@@ -60,10 +60,7 @@ var UserSrore = /** @class */ (function () {
                     case 2:
                         result = _a.sent();
                         conn.release();
-                        if (result.rows[0].id) {
-                            return [2 /*return*/, result.rows];
-                        }
-                        return [3 /*break*/, 4];
+                        return [2 /*return*/, result.rows];
                     case 3:
                         err_1 = _a.sent();
                         throw new Error("can not get users list. ".concat(err_1));
@@ -100,29 +97,33 @@ var UserSrore = /** @class */ (function () {
         });
     };
     UserSrore.prototype.create = function (u) {
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
             var sql, hash, conn, result, user, err_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        _a.trys.push([0, 3, , 4]);
+                        _b.trys.push([0, 3, , 4]);
                         sql = "INSERT INTO users (first_name, last_name, password_digest) VALUES ($1, $2, $3) RETURNING *";
                         hash = bcrypt_1["default"].hashSync(u.password + process.env.BCRYPT_PASSWORD, parseInt(process.env.SALT_ROUNDS));
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
-                        conn = _a.sent();
+                        conn = _b.sent();
                         return [4 /*yield*/, conn.query(sql, [
                                 u.first_name,
                                 u.last_name,
                                 hash,
                             ])];
                     case 2:
-                        result = _a.sent();
-                        user = result.rows[0];
+                        result = _b.sent();
                         conn.release();
-                        return [2 /*return*/, user];
+                        if ((_a = result.rows[0]) === null || _a === void 0 ? void 0 : _a.id) {
+                            user = result.rows[0];
+                            return [2 /*return*/, user];
+                        }
+                        return [3 /*break*/, 4];
                     case 3:
-                        err_3 = _a.sent();
+                        err_3 = _b.sent();
                         throw new Error("Could not add new user. ".concat(err_3));
                     case 4: return [2 /*return*/];
                 }

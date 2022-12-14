@@ -17,7 +17,7 @@ export type OrderPrducts = {
   product_id: string;
 };
 export class OrderSrore {
-  async create(o: Order): Promise<Order> {
+  async create(o: Order): Promise<Order | undefined> {
     try {
       const sqlOrderInfo =
         "INSERT INTO orders (user_id, status) VALUES ($1, $2) RETURNING *";
@@ -35,12 +35,11 @@ export class OrderSrore {
           sql;
 
         const result = await conn.query(finalQuery);
+        conn.release();
+        return order;
       }
-      conn.release();
-      // console.log('order', order)
-      return order;
     } catch (err) {
-      throw new Error(`Could not add new order. Error_model: ${err}`);
+      throw new Error(`Could not add new order. ${err}`);
     }
   }
 
@@ -101,8 +100,7 @@ export class OrderSrore {
       const result = await conn.query(sql, [orderId]);
        products = result.rows;
       const currentOrder = { id: orderId, user_id: userId, products: products?.map(pdt => ({id:pdt.product_id, quantity:pdt.quantity})) };
-      console.log('model', currentOrder)
-      // console.log('hiiiiiiiiiiiiiiiiiiii', currentOrder)
+     
       conn.release();
       return currentOrder
    

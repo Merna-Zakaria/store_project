@@ -62,7 +62,7 @@ var productSrore = /** @class */ (function () {
                         return [2 /*return*/, result.rows];
                     case 3:
                         err_1 = _a.sent();
-                        throw new Error("can not get products. Error_model: ".concat(err_1));
+                        throw new Error("can not get products list. ".concat(err_1));
                     case 4: return [2 /*return*/];
                 }
             });
@@ -83,38 +83,44 @@ var productSrore = /** @class */ (function () {
                     case 2:
                         result = _a.sent();
                         conn.release();
-                        return [2 /*return*/, result.rows[0]];
+                        if (result.rows[0].id) {
+                            return [2 /*return*/, result.rows[0]];
+                        }
+                        return [3 /*break*/, 4];
                     case 3:
                         err_2 = _a.sent();
-                        throw new Error("Could not find product ".concat(id, ". Error_model: ").concat(err_2));
+                        throw new Error("Could not find product ".concat(id, ". ").concat(err_2));
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
     productSrore.prototype.create = function (p) {
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
             var sql, conn, result, product, err_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        _a.trys.push([0, 3, , 4]);
+                        _b.trys.push([0, 3, , 4]);
                         sql = "INSERT INTO products (name, price) VALUES ($1, $2) RETURNING *";
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
-                        conn = _a.sent();
+                        conn = _b.sent();
                         return [4 /*yield*/, conn.query(sql, [
                                 p.name, p.price
                             ])];
                     case 2:
-                        result = _a.sent();
-                        product = result.rows[0];
-                        // console.log('product', product)
+                        result = _b.sent();
                         conn.release();
-                        return [2 /*return*/, product];
+                        if ((_a = result.rows[0]) === null || _a === void 0 ? void 0 : _a.id) {
+                            product = result.rows[0];
+                            return [2 /*return*/, product];
+                        }
+                        return [3 /*break*/, 4];
                     case 3:
-                        err_3 = _a.sent();
-                        throw new Error("Could not add new product. Error_model: ".concat(err_3));
+                        err_3 = _b.sent();
+                        throw new Error("Could not add new product. ".concat(err_3));
                     case 4: return [2 /*return*/];
                 }
             });

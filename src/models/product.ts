@@ -8,32 +8,34 @@ export type Product = {
 };
 
 export class productSrore {
-  async index(): Promise<Product[]> {
+  async index(): Promise<Product[] | undefined> {
     try {
       const conn = await Client.connect();
       const sql = "SELECT * FROM products";
       const result = await conn.query(sql);
       conn.release();
-      return result.rows;
+        return result.rows;
     } catch (err) {
-      throw new Error(`can not get products. Error_model: ${err}`);
+      throw new Error(`can not get products list. ${err}`);
     }
   }
 
-  async show(id: string): Promise<Product> {
+  async show(id: string): Promise<Product | undefined> {
     try {
       const sql = "SELECT * FROM products WHERE id=($1)";
       // @ts-ignore
       const conn = await Client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
-      return result.rows[0];
+      if(result.rows[0].id){
+        return result.rows[0];
+      }
     } catch (err) {
-      throw new Error(`Could not find product ${id}. Error_model: ${err}`);
+      throw new Error(`Could not find product ${id}. ${err}`);
     }
   }
 
-  async create(p: Product): Promise<Product> {
+  async create(p: Product): Promise<Product | undefined> {
     try {
       const sql =
         "INSERT INTO products (name, price) VALUES ($1, $2) RETURNING *";
@@ -42,12 +44,13 @@ export class productSrore {
       const result = await conn.query(sql, [
      p.name, p.price
       ]);
-      const product = result.rows[0];
-      // console.log('product', product)
       conn.release();
-      return product;
+      if(result.rows[0]?.id){
+        const product = result.rows[0];
+        return product;
+      }
     } catch (err) {
-      throw new Error(`Could not add new product. Error_model: ${err}`);
+      throw new Error(`Could not add new product. ${err}`);
     }
   }
 

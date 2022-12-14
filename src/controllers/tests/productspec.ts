@@ -3,28 +3,6 @@ const productRequest = require("supertest");
 import { Product } from "../../models/product";
 
 describe("product controller", () => {
-  // let server: unknown;
-  // let userRes: { _body: any; status: number };
-  // let token: string;
-  // let productCreated: { _body: any; status: number }
-  // const product = {
-  //   name: "test_product",
-  //   price: 5,
-  // };
-  // beforeAll(async () => {
-  //   let user = {
-  //     first_name: "m",
-  //     last_name: "z",
-  //     password: "1234",
-  //   };
-  //   server = require("../../server");
-  //   userRes = await productRequest(server).post("/api/users").send({ user });
-  //   token = `Bearer ${userRes._body?.token}`;
-
-  //   productCreated = await productRequest(server)
-  //     .post("/api/products")
-  //     .send({ product })
-  //     .set({ Authorization: token });
   let server: unknown;
   let dbResult;
   let productRes: Product;
@@ -58,3 +36,4 @@ describe("product controller", () => {
     expect(productRes.price).toEqual(productPayload.price);
   });
 });
+

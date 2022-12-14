@@ -6,35 +6,35 @@ const store = new productSrore();
 export const index = async (_req: Request, res: Response) => {
   try {
     const products = await store.index();
-    res.json(products);
+    res.status(200).json(products);
   } catch (err) {
-    res.json(`can not get products from model. Error_controller: ${err}`);
-    res.status(400);
+    res.status(400).json(`${err}`);
   }
 };
 
 export const show = async (req: Request, res: Response) => {
   try {
     const product = await store.show(req.params.id);
-    res.json(product);
+    res.status(200).json(product);
   } catch (err) {
-    res.json(
-      `Could not find product ${req.params.id}. Error_controller: ${err}`
-    );
-    res.status(400);
+    res.status(400).json(`${err}`);
   }
 };
 
 export const create = async (req: Request, res: Response) => {
   try {
-    const product = {
-      name: req.body.product.name,
-      price: req.body.product.price,
-    };
-    const newProduct = await store.create(product);
-    res.json(newProduct);
+    const {name, price} = req.body;
+    if(name && price){
+      const product = {
+        name,
+        price
+      };
+      const newProduct = await store.create(product);
+      res.json(newProduct);
+    }else{
+      throw new Error(`Could not add new product.`);
+    }
   } catch (err) {
-    res.json(`Could not add new product. Error_controller: ${err}`);
-    res.status(400);
+    res.status(400).json(`${err}`);
   }
 };

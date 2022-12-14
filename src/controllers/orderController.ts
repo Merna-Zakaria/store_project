@@ -8,19 +8,20 @@ const store = new OrderSrore()
 
 export const create = async (req: Request, res: Response) => { 
     try {
-       const order = {
-            user_id: req.body.user_id,
-            products: req.body.products,
-            status: req.body.status
-          };
-          const orderCreated = await store.create(order)
-          // console.log('req.body', req.body)
-        res.json(orderCreated)
+      const {user_id, products, status} = req.body;
+      if(user_id && products && status){
+        const order = {
+             user_id,
+             products,
+             status
+           };
+           const orderCreated = await store.create({...order})
+         res.json(orderCreated)
+      }else{
+        throw new Error(`Could not add new order.`);
+      }
     } catch(err) {
-      res.json(
-        `Could not add order. Error_controller: ${err}`
-      );
-      res.status(400);
+      res.status(400).json(`${err}`);
     }
   }
 
@@ -33,10 +34,7 @@ export const create = async (req: Request, res: Response) => {
       const addedProduct = await store.addProduct(quantity, orderId, productId)
       res.json(addedProduct)
     } catch(err) {
-      res.json(
-        `Could not add product. Error_controller: ${err}`
-      );
-      res.status(400);
+      res.status(400).json(`${err}`);
     }
   } 
 
@@ -45,14 +43,9 @@ export const create = async (req: Request, res: Response) => {
   
     try {
       const currentOrder = await store.getCurrentOrder(userId)
-      // console.log('controller',currentOrder, userId)
-      res.json(currentOrder)
+      res.status(200).json(currentOrder)
     } catch(err) {
-      console.log('error', err)
-      res.json(
-        `Could not find current order. Error_controller: ${err}`
-      );
-      res.status(400);
+      res.status(400).json(`${err}`);
     }
   } 
   

@@ -17,9 +17,7 @@ export class UserSrore {
       const sql = "SELECT * FROM users";
       const result = await conn.query(sql);
       conn.release();
-      if(result.rows[0].id){
         return result.rows;
-      }
     } catch (err) {
       throw new Error(`can not get users list. ${err}`);
     }
@@ -40,7 +38,7 @@ export class UserSrore {
     }
   }
 
-  async create(u: User): Promise<User> {
+  async create(u: User): Promise<User | undefined> {
     // post /users --> create new user as signup feature
     try {
      
@@ -57,9 +55,11 @@ export class UserSrore {
           u.last_name,
           hash,
         ]);
-        const user = result.rows[0];
         conn.release();
-        return user;
+        if(result.rows[0]?.id){
+          const user = result.rows[0];
+          return user;
+        }
       
     } catch (err) {
       throw new Error(`Could not add new user. ${err}`);

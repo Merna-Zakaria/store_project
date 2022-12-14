@@ -67,14 +67,12 @@ var OrderSrore = /** @class */ (function () {
                         return [4 /*yield*/, conn.query(finalQuery)];
                     case 3:
                         result_1 = _b.sent();
-                        _b.label = 4;
-                    case 4:
                         conn.release();
-                        // console.log('order', order)
                         return [2 /*return*/, order_1];
+                    case 4: return [3 /*break*/, 6];
                     case 5:
                         err_1 = _b.sent();
-                        throw new Error("Could not add new order. Error_model: ".concat(err_1));
+                        throw new Error("Could not add new order. ".concat(err_1));
                     case 6: return [2 /*return*/];
                 }
             });
@@ -146,8 +144,6 @@ var OrderSrore = /** @class */ (function () {
                         result = _b.sent();
                         products = result.rows;
                         currentOrder = { id: orderId, user_id: userId, products: products === null || products === void 0 ? void 0 : products.map(function (pdt) { return ({ id: pdt.product_id, quantity: pdt.quantity }); }) };
-                        // console.log('model', currentOrder);
-                        // console.log('hiiiiiiiiiiiiiiiiiiii', currentOrder)
                         conn.release();
                         return [2 /*return*/, currentOrder];
                     case 4:
