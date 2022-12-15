@@ -62,10 +62,15 @@ and then run this command `$ npm install` or `$ yard add`to install project depe
 ###### to run testing `$ npm run test`
 #Instructions to create & connect to shopping database
 ###open postgres terminal then run these commands
+
 $ `CREATE USER shopping_user WITH PASSWORD 'password123';`
+
 $ `CREATE DATABASE shopping;`
+
 $ `\c shopping`
+
 $ `GRANT ALL PRIVILEGES ON DATABASE shopping TO shopping_user;`
+
 $ `\dt` --> Did not find any relations.
 
 
