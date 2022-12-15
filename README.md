@@ -91,5 +91,5 @@ BCRYPT_PASSWORD=speak_friend_and_enter
 SALT_ROUNDS=10
 TOKEN_SECRET=merna123!`
 
-### Database is running on Default port is 5432.
+### Database is running on default port is 5432.
 ### Server is running on http://localhost:3000/api --> main router
