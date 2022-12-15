@@ -60,6 +60,7 @@ and then run this command `$ npm install` or `$ yard add`to install project depe
 
 ###### to run the project on local machine `$ npm run watch`
 ###### to run testing `$ npm run test`
+
 # Instructions to create & connect to shopping database
 ### open postgres terminal then run these commands
 
@@ -89,3 +90,6 @@ POSTGRES_PASSWORD=password123
 BCRYPT_PASSWORD=speak_friend_and_enter
 SALT_ROUNDS=10
 TOKEN_SECRET=merna123!`
+
+### Database is running on Default port is 5432.
+### Server is running on http://localhost:3000/api --> main router
