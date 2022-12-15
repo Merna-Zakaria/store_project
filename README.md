@@ -54,6 +54,7 @@ Before submitting, make sure that your project is complete with a `README.md`. Y
 Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
 
 # Install and Run the Project
+###### Server is running on http://localhost:3000/api --> main router
 run this command in terminal `$ git clone https://github.com/Merna-Zakaria/store_project.git`
 open it in text editor
 and then run this command `$ npm install` or `$ yard add`to install project dependenceise
@@ -62,6 +63,7 @@ and then run this command `$ npm install` or `$ yard add`to install project depe
 ###### to run testing `$ npm run test`
 
 # Instructions to create & connect to shopping database
+###### Database is running on default port is 5432
 ### open postgres terminal then run these commands
 
 $ `CREATE USER shopping_user WITH PASSWORD 'password123';`
@@ -91,5 +93,3 @@ BCRYPT_PASSWORD=speak_friend_and_enter
 SALT_ROUNDS=10
 TOKEN_SECRET=merna123!`
 
-### Database is running on default port is 5432.
-### Server is running on http://localhost:3000/api --> main router
