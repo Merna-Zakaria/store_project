@@ -5,13 +5,13 @@ import { Product } from "../../models/product";
 describe("product controller", () => {
   let server: unknown;
   let dbResult;
-  let productRes: Product;
+  let productCreated: Product;
   let productPayload: Product;
   let token: string;
   beforeAll(async () => {
     server = require("../../server");
     dbResult = await setupTestDatabase()
-    productRes = dbResult.productCreated;
+    productCreated = dbResult.productCreated;
     productPayload = dbResult.productPayload;
     token = dbResult.token
   });
@@ -19,21 +19,20 @@ describe("product controller", () => {
   it("responds to get products list /api/products", async () => {
     let response = await productRequest(server).get("/api/products");
     expect(response.status).toEqual(200);
-    expect(response.length).toBeGreaterThanOrEqual(1);
+    expect(response._body.length).toBeGreaterThanOrEqual(1);
   });
 
   it("responds to /api/products/:id", async () => {
-    let singleProductRes = await productRequest(server).get(
-      `/api/products/${productRes.id}`
+    let singleproductCreated = await productRequest(server).get(
+      `/api/products/${productCreated.id}`
     );
 
-    expect(singleProductRes._body.id).toEqual(productRes.id);
+    expect(singleproductCreated._body.id).toEqual(productCreated.id);
   });
 
   it("responds to create product /api/products", async () => {
-    console.log('productRes', productRes)
-    expect(productRes.name).toEqual(productPayload.name);
-    expect(productRes.price).toEqual(productPayload.price);
+    expect(productCreated.name).toEqual(productPayload.name);
+    expect(productCreated.price).toEqual(productPayload.price);
   });
 });
 

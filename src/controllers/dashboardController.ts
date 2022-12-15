@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
-import { DashboardQueries } from "../services/dashboard";
-const dashboard = new DashboardQueries();
+import { DashboardStore } from "../services/dashboard";
+const dashboard = new DashboardStore();
 
 export const productsInOrders = async (_req: Request, res: Response) => {
   try {

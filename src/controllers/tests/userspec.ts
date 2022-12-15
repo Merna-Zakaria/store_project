@@ -5,13 +5,13 @@ const userRequest = require("supertest");
 describe("user controller", () => {
   let server: unknown;
   let dbResult;
-  let userRes: User;
+  let userCreated: User;
   let userPayload: User;
   let token: string;
   beforeAll(async () => {
     server = require("../../server");
     dbResult = await setupTestDatabase()
-    userRes = dbResult.userCreated;
+    userCreated = dbResult.userCreated;
     userPayload = dbResult.userPayload;
     token = dbResult.token
     
@@ -29,15 +29,15 @@ describe("user controller", () => {
   });
 
   it("should get single user  /api/users/:id", async () => {
-    let singleUserRes = await userRequest(server).get(`/api/users/${userRes.id}`).set({ Authorization: token });
-    expect(singleUserRes.status).toEqual(200);
-    expect(singleUserRes._body.id).toEqual(userRes.id)
+    let singleuserCreated = await userRequest(server).get(`/api/users/${userCreated.id}`).set({ Authorization: token });
+    expect(singleuserCreated.status).toEqual(200);
+    expect(singleuserCreated._body.id).toEqual(userCreated.id)
 
   });
 
   it("should create user /api/users", async () => {
-    expect(userRes.first_name).toEqual(userPayload.first_name);
-    expect(userRes.last_name).toEqual(userPayload.last_name);
+    expect(userCreated.first_name).toEqual(userPayload.first_name);
+    expect(userCreated.last_name).toEqual(userPayload.last_name);
 
   });
 });

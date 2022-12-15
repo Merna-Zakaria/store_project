@@ -39,13 +39,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.DashboardQueries = void 0;
+exports.DashboardStore = void 0;
 var database_1 = __importDefault(require("../database"));
-var DashboardQueries = /** @class */ (function () {
-    function DashboardQueries() {
+var DashboardStore = /** @class */ (function () {
+    function DashboardStore() {
     }
     // Get all products that have been included in orders
-    DashboardQueries.prototype.productsInOrders = function () {
+    DashboardStore.prototype.productsInOrders = function () {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_1;
             return __generator(this, function (_a) {
@@ -70,7 +70,7 @@ var DashboardQueries = /** @class */ (function () {
         });
     };
     // Get all users that have made orders
-    DashboardQueries.prototype.usersWithOrders = function () {
+    DashboardStore.prototype.usersWithOrders = function () {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_2;
             return __generator(this, function (_a) {
@@ -95,7 +95,7 @@ var DashboardQueries = /** @class */ (function () {
         });
     };
     // get the 5 most expensive products
-    DashboardQueries.prototype.fiveMostExpensive = function () {
+    DashboardStore.prototype.fiveMostExpensive = function () {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_3;
             return __generator(this, function (_a) {
@@ -119,6 +119,6 @@ var DashboardQueries = /** @class */ (function () {
             });
         });
     };
-    return DashboardQueries;
+    return DashboardStore;
 }());
-exports.DashboardQueries = DashboardQueries;
+exports.DashboardStore = DashboardStore;

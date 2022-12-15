@@ -44,10 +44,34 @@ var database_1 = __importDefault(require("../database"));
 var OrderSrore = /** @class */ (function () {
     function OrderSrore() {
     }
+    OrderSrore.prototype.index = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var conn, sql, result, err_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, database_1["default"].connect()];
+                    case 1:
+                        conn = _a.sent();
+                        sql = "SELECT * FROM orders";
+                        return [4 /*yield*/, conn.query(sql)];
+                    case 2:
+                        result = _a.sent();
+                        conn.release();
+                        return [2 /*return*/, result.rows];
+                    case 3:
+                        err_1 = _a.sent();
+                        throw new Error("can not get orders list. ".concat(err_1));
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
     OrderSrore.prototype.create = function (o) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var sqlOrderInfo, conn, result, order_1, sql, finalQuery, result_1, err_1;
+            var sqlOrderInfo, conn, result, order_1, sql, finalQuery, result_1, err_2;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -71,8 +95,8 @@ var OrderSrore = /** @class */ (function () {
                         return [2 /*return*/, order_1];
                     case 4: return [3 /*break*/, 6];
                     case 5:
-                        err_1 = _b.sent();
-                        throw new Error("Could not add new order. ".concat(err_1));
+                        err_2 = _b.sent();
+                        throw new Error("Could not add new order. ".concat(err_2));
                     case 6: return [2 /*return*/];
                 }
             });
@@ -80,7 +104,7 @@ var OrderSrore = /** @class */ (function () {
     };
     OrderSrore.prototype.addProduct = function (quantity, orderId, productId) {
         return __awaiter(this, void 0, void 0, function () {
-            var ordersql, conn, result, order, err_2, sql, conn, result, order, err_3;
+            var ordersql, conn, result, order, err_3, sql, conn, result, order, err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -99,8 +123,8 @@ var OrderSrore = /** @class */ (function () {
                         conn.release();
                         return [3 /*break*/, 4];
                     case 3:
-                        err_2 = _a.sent();
-                        throw new Error("".concat(err_2));
+                        err_3 = _a.sent();
+                        throw new Error("".concat(err_3));
                     case 4:
                         _a.trys.push([4, 7, , 8]);
                         sql = "INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *";
@@ -114,8 +138,8 @@ var OrderSrore = /** @class */ (function () {
                         conn.release();
                         return [2 /*return*/, order];
                     case 7:
-                        err_3 = _a.sent();
-                        throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, " Error_model: ").concat(err_3));
+                        err_4 = _a.sent();
+                        throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, " Error_model: ").concat(err_4));
                     case 8: return [2 /*return*/];
                 }
             });
@@ -124,40 +148,42 @@ var OrderSrore = /** @class */ (function () {
     OrderSrore.prototype.getCurrentOrder = function (userId) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var products, orderId, conn, orderSql, Idresult, currentOrderIndex, sql, result, currentOrder, err_4;
+            var products, orderId, conn, orderSql, userIdList, currentOrderIndex, sql, result, currentOrder, err_5;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _b.trys.push([0, 4, , 5]);
+                        _b.trys.push([0, 6, , 7]);
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _b.sent();
                         orderSql = "SELECT id FROM orders WHERE user_id = ($1)";
                         return [4 /*yield*/, conn.query(orderSql, [userId])];
                     case 2:
-                        Idresult = _b.sent();
-                        currentOrderIndex = Idresult.rows.length - 1;
-                        orderId = (_a = Idresult.rows[currentOrderIndex]) === null || _a === void 0 ? void 0 : _a.id;
+                        userIdList = _b.sent();
+                        if (!(userIdList.rows.length > 0)) return [3 /*break*/, 4];
+                        currentOrderIndex = userIdList.rows.length - 1;
+                        orderId = (_a = userIdList.rows[currentOrderIndex]) === null || _a === void 0 ? void 0 : _a.id;
                         sql = "SELECT * FROM order_products WHERE order_id = ($1)";
                         return [4 /*yield*/, conn.query(sql, [orderId])];
                     case 3:
                         result = _b.sent();
                         products = result.rows;
-                        currentOrder = { id: orderId, user_id: userId, products: products === null || products === void 0 ? void 0 : products.map(function (pdt) { return ({ id: pdt.product_id, quantity: pdt.quantity }); }) };
                         conn.release();
+                        currentOrder = { id: orderId, user_id: userId, products: products === null || products === void 0 ? void 0 : products.map(function (pdt) { return ({ id: pdt.product_id, quantity: pdt.quantity }); }) };
                         return [2 /*return*/, currentOrder];
-                    case 4:
-                        err_4 = _b.sent();
-                        console.log('err model', err_4);
-                        throw new Error("Could not get current order. Error_model: ".concat(err_4));
-                    case 5: return [2 /*return*/];
+                    case 4: throw new Error("This user do not have any order");
+                    case 5: return [3 /*break*/, 7];
+                    case 6:
+                        err_5 = _b.sent();
+                        throw new Error("Could not get current order. ".concat(err_5));
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
     OrderSrore.prototype.getCompleteOrders = function (userId) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, completeOrder, err_5;
+            var sql, conn, result, completeOrder, err_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -172,8 +198,8 @@ var OrderSrore = /** @class */ (function () {
                         completeOrder = result.rows;
                         return [2 /*return*/, completeOrder];
                     case 3:
-                        err_5 = _a.sent();
-                        throw new Error("Could not get compelete orders. Error_model: ".concat(err_5));
+                        err_6 = _a.sent();
+                        throw new Error("Could not get compelete orders. Error_model: ".concat(err_6));
                     case 4: return [2 /*return*/];
                 }
             });

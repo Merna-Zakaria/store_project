@@ -5,12 +5,12 @@ const store = new UserSrore();
 
 describe("user model", () => {
   let dbResult;
-  let userRes: User;
+  let userCreated: User;
   let userPayload: User;
 
   beforeAll(async () => {
     dbResult = await setupTestDatabase();
-    userRes = dbResult.userCreated;
+    userCreated = dbResult.userCreated;
     userPayload = dbResult.userPayload;
   });
 
@@ -28,7 +28,7 @@ describe("user model", () => {
   });
 
   it("show method should return single user", async () => {
-    const userId = userRes.id;
+    const userId = userCreated.id;
     const result = await store.show(JSON.stringify(userId));
     expect(result?.id).toEqual(userId);
   });

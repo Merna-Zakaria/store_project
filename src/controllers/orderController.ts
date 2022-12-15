@@ -6,6 +6,15 @@ dotenv.config();
 
 const store = new OrderSrore()
 
+export const index = async (_req: Request, res: Response) => {
+  try {
+    const orders = await store.index();
+    res.status(200).json(orders);
+  } catch (err) {
+    res.status(400).json(`${err}`);
+  }
+};
+
 export const create = async (req: Request, res: Response) => { 
     try {
       const {user_id, products, status} = req.body;
@@ -15,7 +24,7 @@ export const create = async (req: Request, res: Response) => {
              products,
              status
            };
-           const orderCreated = await store.create({...order})
+           const orderCreated = await store.create(order)
          res.json(orderCreated)
       }else{
         throw new Error(`Could not add new order.`);

@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.fiveMostExpensive = exports.usersWithOrders = exports.productsInOrders = void 0;
 var dashboard_1 = require("../services/dashboard");
-var dashboard = new dashboard_1.DashboardQueries();
+var dashboard = new dashboard_1.DashboardStore();
 var productsInOrders = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var products, err_1;
     return __generator(this, function (_a) {

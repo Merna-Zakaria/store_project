@@ -7,6 +7,7 @@ var express_1 = __importDefault(require("express"));
 var userController_1 = require("../../controllers/userController");
 var orderController_1 = require("../../controllers/orderController");
 var orderRouter = express_1["default"].Router();
+orderRouter.get('/', userController_1.verifyAuthToken, orderController_1.index);
 orderRouter.post('/', userController_1.verifyAuthToken, orderController_1.create);
 orderRouter.post('/:id/products', userController_1.verifyAuthToken, orderController_1.addProduct);
 orderRouter.get('/current/:userId', userController_1.verifyAuthToken, orderController_1.getCurrentOrder);

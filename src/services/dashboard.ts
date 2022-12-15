@@ -1,6 +1,6 @@
 import Client from '../database'
 
-export class DashboardQueries {
+export class DashboardStore {
   // Get all products that have been included in orders
   async productsInOrders(): Promise<{name: string,quantity: number, price: number, order_id: number}[]> {
     try {
