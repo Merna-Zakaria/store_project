@@ -52,3 +52,22 @@ Add JWT functionality as shown in the course. Make sure that JWTs are required f
 Before submitting, make sure that your project is complete with a `README.md`. Your `README.md` must include instructions for setting up and running your project including how you setup, run, and connect to your database. 
 
 Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
+
+# Install and Run the Project
+run this command in terminal `$ git clone https://github.com/Merna-Zakaria/store_project.git`
+open it in text editor
+and then run this command `$ npm install` or `$ yard add`to install project dependenceise
+
+###### to run the project on local machine `$ npm run watch`
+###### to run testing `$ npm run test`
+#Instructions to create & connect to shopping database
+###open postgres terminal then run these commands
+$ `CREATE USER shopping_user WITH PASSWORD 'password123';`
+$ `CREATE DATABASE shopping;`
+$ `\c shopping`
+$ `GRANT ALL PRIVILEGES ON DATABASE shopping TO shopping_user;`
+$ `\dt` --> Did not find any relations.
+
+
+# How to Use the Project
+You should enter image name (filename) you want to disply it, this name refere to images name available in assests folder in project, then enter width & height you want. 
