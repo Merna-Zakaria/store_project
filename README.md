@@ -78,7 +78,7 @@ $ `\dt` --> Did not find any relations.
 In project terminal run this cmd to migrate db up: $ `db-migrate up`
 then switch enviroment in .env to test ENV=test , and run this cmd: : $ `db-migrate up`
 
-#Create .env in root directory and and these variable in it
+# Create .env in root directory and and these variable in it
 
 `ENV=dev
 POSTGRES_HOST=localhost
