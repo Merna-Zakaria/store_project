@@ -60,8 +60,8 @@ and then run this command `$ npm install` or `$ yard add`to install project depe
 
 ###### to run the project on local machine `$ npm run watch`
 ###### to run testing `$ npm run test`
-#Instructions to create & connect to shopping database
-###open postgres terminal then run these commands
+# Instructions to create & connect to shopping database
+### open postgres terminal then run these commands
 
 $ `CREATE USER shopping_user WITH PASSWORD 'password123';`
 
@@ -75,7 +75,11 @@ $ `\dt` --> Did not find any relations.
 
 ### Repeat last instructions to create database from testing called shopping_test
 
+In project terminal run this cmd to migrate db up: $ `db-migrate up`
+then switch enviroment in .env to test ENV=test , and run this cmd: : $ `db-migrate up`
+
 #Create .env in root directory and and these variable in it
+
 `ENV=dev
 POSTGRES_HOST=localhost
 POSTGRES_DB=shopping
