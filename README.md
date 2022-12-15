@@ -89,7 +89,3 @@ POSTGRES_PASSWORD=password123
 BCRYPT_PASSWORD=speak_friend_and_enter
 SALT_ROUNDS=10
 TOKEN_SECRET=merna123!`
-
-
-# How to Use the Project
-You should enter image name (filename) you want to disply it, this name refere to images name available in assests folder in project, then enter width & height you want. 
