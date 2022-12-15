@@ -55,6 +55,7 @@ Before submitting your project, spin it up and test each endpoint. If each one r
 
 # Install and Run the Project
 Server is running on port 3000 : http://localhost:3000/api --> main router
+
 run this command in terminal `$ git clone https://github.com/Merna-Zakaria/store_project.git`
 open it in text editor
 and then run this command `$ npm install` or `$ yard add`to install project dependenceise
@@ -63,7 +64,7 @@ and then run this command `$ npm install` or `$ yard add`to install project depe
 ###### to run testing `$ npm run test`
 
 # Instructions to create & connect to shopping database
-Database is running on default port is 5432
+Database is running on default port`5432`
 ### open postgres terminal then run these commands
 
 $ `CREATE USER shopping_user WITH PASSWORD 'password123';`
