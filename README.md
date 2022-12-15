@@ -73,6 +73,19 @@ $ `GRANT ALL PRIVILEGES ON DATABASE shopping TO shopping_user;`
 
 $ `\dt` --> Did not find any relations.
 
+### Repeat last instructions to create database from testing called shopping_test
+
+#Create .env in root directory and and these variable in it
+`ENV=dev
+POSTGRES_HOST=localhost
+POSTGRES_DB=shopping
+POSTGRES_TEST_DB=shopping_test
+POSTGRES_USER=shopping_user
+POSTGRES_PASSWORD=password123
+BCRYPT_PASSWORD=speak_friend_and_enter
+SALT_ROUNDS=10
+TOKEN_SECRET=merna123!`
+
 
 # How to Use the Project
 You should enter image name (filename) you want to disply it, this name refere to images name available in assests folder in project, then enter width & height you want. 
